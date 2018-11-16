@@ -1,6 +1,6 @@
 target/
-.history/
 !.mvn/wrapper/maven-wrapper.jar
+.history/
 
 ### STS ###
 .apt_generated

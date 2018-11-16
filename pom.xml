@@ -172,4 +172,24 @@
 	</dependency>
 
   </dependencies>
+  <artifactId>api-common</artifactId>
+  <packaging>jar</packaging>
+
+  <name>api-common</name>
+  <url>http://maven.apache.org</url>
+
+	<parent>
+		<groupId>org.zowe</groupId>
+		<artifactId>api-parent</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../api-parent</relativePath> <!-- TODO: lookup parent from repository? -->
+	</parent>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
 </project>
