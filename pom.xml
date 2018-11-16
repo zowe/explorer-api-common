@@ -177,6 +177,10 @@
 
   <name>api-common</name>
   <url>http://maven.apache.org</url>
+  <artifactId>api-common-test</artifactId>
+  <packaging>jar</packaging>
+
+  <name>api-common-test</name>
 
 	<parent>
 		<groupId>org.zowe</groupId>
@@ -187,9 +191,35 @@
 	
 	<dependencies>
 		<dependency>
+<<<<<<< HEAD
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
 	</dependencies>
+=======
+	      <groupId>junit</groupId>
+	      <artifactId>junit</artifactId>
+	    </dependency>
+    </dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>Jar Tests Package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+>>>>>>> 6f5abb2... first commit
 </project>
