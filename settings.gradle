@@ -1,0 +1,5 @@
+rootProject.name = 'explorer-api-common'
+
+include 'explorer-api-common'
+include 'explorer-api-common-test'
+
