@@ -1,12 +1,7 @@
 dependencies {
-    compile libraries.spring_boot_starter_web
-
-
-    compileOnly libraries.lombok
-
-    testCompile libraries.spring_boot_starter_test
-    testCompile libraries.powermock_api_mockito2
-    testCompile libraries.power_mock_junit4
-    testCompile libraries.power_mock_junit4_rule
-    testCompile libraries.gson
+    compile libraries.spring_boot_starter_test
+    compile libraries.powermock_api_mockito2
+    compile libraries.power_mock_junit4
+    compile libraries.power_mock_junit4_rule
+    compile libraries.mockito_core
 }

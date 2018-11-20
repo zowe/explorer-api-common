@@ -2,6 +2,10 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 .history/
 
+# Gradle
+.gradle/
+.idea/
+
 ### STS ###
 .apt_generated
 .classpath
@@ -19,7 +23,7 @@ target/
 
 ### NetBeans ###
 /nbproject/private/
-/build/
+**/build/
 /nbbuild/
 /dist/
 /nbdist/

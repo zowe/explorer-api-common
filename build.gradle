@@ -69,7 +69,7 @@ allprojects {
 
 subprojects {
     license {
-        header rootProject.file('.licence/LICENSE_HEADER')
+        header rootProject.file('.license/LICENSE_HEADER')
         ext.year = Calendar.getInstance().get(Calendar.YEAR)
         excludes(["**/*.yml", "**/*.json", "**/static", "**/*.sh", "**/*.txt", "**/*.p12", "**/*.xml", "**/*.jsp", "**/*.html", "**/*.jks"])
         mapping {
