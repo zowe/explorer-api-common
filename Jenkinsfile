@@ -150,7 +150,6 @@ pipeline {
             }
             steps {
                 timeout(time: 10, unit: 'MINUTES') {
-                    echo 'Building All Projects...'
                     sh './gradlew build'
                 }
             }
