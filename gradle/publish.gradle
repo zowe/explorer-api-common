@@ -29,9 +29,9 @@ configure(subprojects.findAll { it.name in projectsToPublish }) {
     publishing {
         publications {
             mavenJava(MavenPublication) {
-                groupId 'org.zowe.api'
+                groupId 'org.zowe.explorer.api'
                 version rootProject.version
-                artifactId "explorer-${project.name}"
+                artifactId "${project.name}"
                 from components.java
                 pom.withXml {
                     asNode().dependencies.'*'.findAll() {
