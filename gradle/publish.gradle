@@ -1,5 +1,6 @@
 ext.javaLibraries = [
-    'explorer-api-common'
+    'explorer-api-common',
+    'explorer-api-common-test'
 ]
 
 // Save this in case we make a packaging subproject 

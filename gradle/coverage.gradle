@@ -1,5 +1,6 @@
 ext.javaProjectsWithUnitTests = [
-    'explorer-api-common'
+    'explorer-api-common',
+    'explorer-api-common-test'
 ]
 
 
