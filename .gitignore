@@ -2,6 +2,12 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 .history/
 
+# VSCode
+.vscode
+
+# AutoBuild
+**/bin
+
 # Gradle
 .gradle/
 .idea/
