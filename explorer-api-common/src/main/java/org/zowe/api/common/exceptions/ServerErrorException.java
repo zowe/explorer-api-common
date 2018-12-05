@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2018
+ * Copyright IBM Corporation 2014, 2018
  */
 package org.zowe.api.common.exceptions;
 
