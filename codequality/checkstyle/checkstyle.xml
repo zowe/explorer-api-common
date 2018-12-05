@@ -34,7 +34,7 @@
 
         <!-- Import order, matching default IntelliJ settings -->
         <module name="ImportOrder">
-            <property name="groups" value="*, javax, java"/>
+            <property name="groups" value="*, com, java, javax, lombok, org"/>
             <property name="ordered" value="true"/>
             <property name="separated" value="true"/>
             <property name="option" value="bottom"/>

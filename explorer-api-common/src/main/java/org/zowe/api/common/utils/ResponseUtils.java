@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright Contributors to the Zowe Project.
+ * Copyright IBM Corporation 2018, 2018
  */
 package org.zowe.api.common.utils;
 
@@ -13,10 +13,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 
 public class ResponseUtils {
 
