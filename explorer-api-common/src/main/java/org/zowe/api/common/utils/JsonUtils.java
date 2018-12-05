@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2018
+ * Copyright IBM Corporation 2015, 2018
  */
 package org.zowe.api.common.utils;
 
@@ -24,13 +24,11 @@ public class JsonUtils {
     private static final ObjectMapper jsonMapper = new ObjectMapper();
     private static final JsonParser parser = new JsonParser();
 
-    public static <T> T convertString(String streamContent, Class<T> outputType)
-            throws IOException {
+    public static <T> T convertString(String streamContent, Class<T> outputType) throws IOException {
         return jsonMapper.readValue(streamContent, outputType);
     }
 
-    public static <T> T convertFilePath(Path filePath, Class<T> outputType)
-            throws IOException {
+    public static <T> T convertFilePath(Path filePath, Class<T> outputType) throws IOException {
         return jsonMapper.readValue(filePath.toFile(), outputType);
     }
 
