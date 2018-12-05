@@ -75,6 +75,7 @@ subprojects {
         mapping {
             java = 'SLASHSTAR_STYLE'
         }
+        skipExistingHeaders = true
     }
 
     tasks.withType(Test) {
