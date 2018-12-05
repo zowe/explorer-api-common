@@ -12,6 +12,8 @@ ext.publishTasksList = projectsToPublish.collect { ":" + it + ":publish" }
 configure(subprojects.findAll { it.name in projectsToPublish }) {
     apply plugin: "maven"
     apply plugin: 'maven-publish'
+    // Java will already be applied elsewhere, but need it here for 'sourceSets'
+    apply plugin: 'java'
     
     task sourcesJar(type: Jar) {
     	from sourceSets.main.allJava
