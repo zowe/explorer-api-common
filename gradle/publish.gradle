@@ -12,6 +12,16 @@ ext.publishTasksList = projectsToPublish.collect { ":" + it + ":publish" }
 configure(subprojects.findAll { it.name in projectsToPublish }) {
     apply plugin: "maven"
     apply plugin: 'maven-publish'
+    
+    task sourcesJar(type: Jar) {
+    	from sourceSets.main.allJava
+    	classifier = 'sources'
+    }
+    
+    task javadocJar(type: Jar) {
+    	from javadoc
+    	classifier = 'javadoc'
+    }
 
     publishing {
         repositories.maven {
@@ -34,6 +44,8 @@ configure(subprojects.findAll { it.name in projectsToPublish }) {
                 version rootProject.version
                 artifactId "${project.name}"
                 from components.java
+                artifact sourcesJar
+                artifact javadocJar
                 pom.withXml {
                     asNode().dependencies.'*'.findAll() {
                         it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
