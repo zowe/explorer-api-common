@@ -9,6 +9,7 @@ buildscript {
     }
 
     ext.mavenRepositories = {
+        
         maven {
             url artifactoryMavenSnapshotRepo
             credentials {

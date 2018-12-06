@@ -1,4 +1,4 @@
-rootProject.name = 'explorer-api-common'
+rootProject.name = 'explorer-api-common-parent'
 
 include 'explorer-api-common'
 include 'explorer-api-common-test'
