@@ -192,6 +192,39 @@ pipeline {
         }
 
         /************************************************************************
+        * STAGE
+        * -----
+        * SonarQube Scanner
+        *
+        * EXECUTION CONDITIONS
+        * --------------------
+        * - SHOULD_BUILD is true
+        * - The build is still successful and not unstable
+        *
+        * DESCRIPTION
+        * -----------
+        * Runs the sonar-scanner analysis tool, which submits the source, test resutls,
+        *  and coverage results for analysis in our SonarQube server.
+        ***********************************************************************/
+        stage('sonar') {
+            when {
+                allOf {
+                    expression {
+                        return SHOULD_BUILD == 'true'
+                    }
+                    expression {
+                        return currentBuild.resultIsBetterOrEqualTo(BUILD_SUCCESS)
+                    }
+                }
+            }
+            steps {
+                withSonarQubeEnv('sonar-default-server') {
+                    sh "./gradlew --info sonarqube -Psonar.host.url=${SONAR_HOST_URL} -Psonar.login=${SONAR_AUTH_TOKEN}"
+                }
+            }
+        }
+
+        /************************************************************************
          * STAGE
          * -----
          * Deploy
