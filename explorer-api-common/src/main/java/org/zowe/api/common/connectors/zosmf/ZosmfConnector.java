@@ -62,6 +62,7 @@ public class ZosmfConnector {
         CustomUser customUser = (CustomUser) authentication.getPrincipal();
         requestBuilder.setHeader("Cookie", customUser.getLtpa());
         requestBuilder.setHeader("X-CSRF-ZOSMF-HEADER", "");
+        requestBuilder.setHeader("X-IBM-Response-Timeout", "600");
 
         HttpClient client;
         try {

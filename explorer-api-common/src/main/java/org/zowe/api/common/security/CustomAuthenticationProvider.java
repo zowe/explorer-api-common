@@ -9,10 +9,6 @@
  */
 package org.zowe.api.common.security;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.http.Header;
@@ -27,6 +23,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.zowe.api.common.connectors.zosmf.ZosmfConnector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -52,7 +51,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             } catch (Exception e) {
                 log.error("authenticate", e);
             }
-            throw new UsernameNotFoundException(username); // todo improve
+            throw new UsernameNotFoundException(username); // TODO improve
         }
         // TODO - review exception/responses?
         return null;
