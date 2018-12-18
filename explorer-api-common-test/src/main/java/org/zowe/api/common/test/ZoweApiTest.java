@@ -12,6 +12,11 @@ package org.zowe.api.common.test;
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -36,5 +41,10 @@ public class ZoweApiTest {
             throw new Error(actual);
         }
         assertEquals(expected.getMessage(), actual.getMessage());
+    }
+
+    public String loadTestFile(String path) throws IOException {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, Charset.forName("UTF8"));
     }
 }
