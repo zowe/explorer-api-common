@@ -9,18 +9,6 @@
  */
 package org.zowe.api.common.connectors.zosmf;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.http.Header;
@@ -40,6 +28,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.zowe.api.common.connectors.zosmf.exceptions.ZosmfConnectionException;
 import org.zowe.api.common.security.CustomUser;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 
 @Slf4j
 @Service
@@ -96,7 +96,7 @@ public class ZosmfConnector {
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
 
         SSLContext sslcontext = SSLContext.getInstance("TLS");
-        sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
+        sslcontext.init(null, new TrustManager[] { new X509TrustManager() {
             @Override
             public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
             }
@@ -124,7 +124,7 @@ public class ZosmfConnector {
 
     public static HttpClient createIgnoreSSLClient() throws KeyManagementException, NoSuchAlgorithmException {
         SSLContext sslcontext = SSLContext.getInstance("TLS");
-        sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
+        sslcontext.init(null, new TrustManager[] { new X509TrustManager() {
             @Override
             public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
             }
@@ -138,7 +138,7 @@ public class ZosmfConnector {
                 return new X509Certificate[0];
             }
 
-        } } , new java.security.SecureRandom());
+        } }, new java.security.SecureRandom());
         return HttpClientBuilder.create().setSSLContext(sslcontext).setSSLHostnameVerifier(new HostnameVerifier() {
 
             @Override

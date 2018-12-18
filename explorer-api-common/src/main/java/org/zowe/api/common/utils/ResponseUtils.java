@@ -14,10 +14,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.io.IOException;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
 
 public class ResponseUtils {
 
