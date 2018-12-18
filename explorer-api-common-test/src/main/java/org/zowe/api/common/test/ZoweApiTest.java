@@ -36,14 +36,14 @@ public class ZoweApiTest {
         }
     }
 
-    public static void shouldHaveThrown(Throwable expected, Throwable actual) {
+    protected static void shouldHaveThrown(Throwable expected, Throwable actual) {
         if (expected.getClass() != actual.getClass()) {
             throw new Error(actual);
         }
         assertEquals(expected.getMessage(), actual.getMessage());
     }
 
-    public String loadTestFile(String path) throws IOException {
+    protected String loadFile(String path) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
         return new String(encoded, Charset.forName("UTF8"));
     }
