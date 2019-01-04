@@ -5,13 +5,14 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2015, 2018
+ * Copyright IBM Corporation 2015, 2019
  */
 package org.zowe.api.common.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
@@ -34,6 +35,10 @@ public class JsonUtils {
 
     public static String convertToJsonString(Object o) throws JsonProcessingException {
         return jsonMapper.writeValueAsString(o);
+    }
+
+    public static JsonObject convertToJsonObject(Object o) throws IOException {
+        return readAsJsonElement(convertToJsonString(o)).getAsJsonObject();
     }
 
     public static JsonElement readFileAsJsonElement(Path filePath) throws JsonSyntaxException, IOException {
