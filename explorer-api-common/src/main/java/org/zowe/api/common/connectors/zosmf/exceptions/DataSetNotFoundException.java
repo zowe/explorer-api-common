@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018
+ * Copyright IBM Corporation 2018, 2019
  */
 package org.zowe.api.common.connectors.zosmf.exceptions;
 
@@ -20,7 +20,7 @@ public class DataSetNotFoundException extends ZoweApiRestException {
     private static final long serialVersionUID = -1614747667957641995L;
 
     public DataSetNotFoundException(String dataSet) {
-        super(HttpStatus.NOT_FOUND, "No data set with name ''{0}'' and id ''{1}'' was found", dataSet);
+        super(HttpStatus.NOT_FOUND, "No data set with name ''{0}'' was found", dataSet);
     }
 
 }

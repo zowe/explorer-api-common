@@ -4,4 +4,5 @@ dependencies {
     compile libraries.power_mock_junit4
     compile libraries.power_mock_junit4_rule
     compile libraries.mockito_core
+    compile libraries.restAssured
 }
