@@ -13,6 +13,7 @@ ext {
     jsonPathVersion = "2.4.0"
     junitVersion = "4.12"
     restAssuredVersion = "3.2.0"
+    hamcrestJunitVersion = "2.0.0.0"
     
 
     libraries = [
@@ -44,6 +45,6 @@ ext {
 
         junit                              : "junit:junit:${junitVersion}",
         restAssured						   : "io.rest-assured:rest-assured:${restAssuredVersion}",
-      
+        hamcrest						   : "org.hamcrest:hamcrest-junit:${hamcrestJunitVersion}"      
     ]
 }
