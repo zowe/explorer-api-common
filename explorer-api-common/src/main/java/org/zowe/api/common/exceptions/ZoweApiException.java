@@ -20,7 +20,11 @@ public class ZoweApiException extends RuntimeException {
     protected String message;
 
     public ZoweApiException(String message, Object... messageArguments) {
-        this.message = MessageFormat.format(message, messageArguments);
+        if (messageArguments.length > 0) {
+            this.message = MessageFormat.format(message, messageArguments);
+        } else {
+            this.message = message;
+        }
     }
 
     @Override
