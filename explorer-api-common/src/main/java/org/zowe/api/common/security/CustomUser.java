@@ -16,10 +16,15 @@ import java.util.Collection;
 
 public class CustomUser extends User {
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -7244581406731606670L;
+
     private final String ltpa;
 
     public CustomUser(String ltpa, String username, String password,
-                      Collection<? extends GrantedAuthority> authorities) {
+            Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
         this.ltpa = ltpa;
     }
