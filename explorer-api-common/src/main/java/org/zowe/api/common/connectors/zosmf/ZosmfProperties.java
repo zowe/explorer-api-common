@@ -22,5 +22,5 @@ import org.springframework.context.annotation.Configuration;
 public class ZosmfProperties {
 
     private String ipAddress;
-    private String httpsPort;
+    private Integer httpsPort;
 }

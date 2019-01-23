@@ -36,6 +36,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -45,15 +47,26 @@ import java.security.cert.X509Certificate;
 @Service
 public class ZosmfConnector {
 
-    private final String baseZosmfUri;
+    private final String zosmfHost;
+    private final int zosmfPort;
 
-    public String getFullUrl(String relativePath) {
-        return baseZosmfUri + relativePath;
+    public URI getFullUrl(String relativePath) throws URISyntaxException {
+        return getFullUrl(relativePath, null);
+    }
+
+    public URI getFullUrl(String relativePath, String query) throws URISyntaxException {
+        try {
+            return new URI("https", null, zosmfHost, zosmfPort, "/zosmf/" + relativePath, query, null);
+        } catch (URISyntaxException e) {
+            log.error("getFullUrl", e);
+            throw e;
+        }
     }
 
     @Autowired
     public ZosmfConnector(ZosmfProperties properties) {
-        baseZosmfUri = "https://" + properties.getIpAddress() + ":" + properties.getHttpsPort() + "/zosmf/";
+        zosmfHost = properties.getIpAddress();
+        zosmfPort = properties.getHttpsPort();
     }
 
     public HttpResponse request(RequestBuilder requestBuilder) throws IOException {
@@ -76,10 +89,10 @@ public class ZosmfConnector {
     }
 
     public Header getLtpaHeader(String username, String password)
-            throws IOException, KeyManagementException, NoSuchAlgorithmException {
+            throws IOException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
         HttpClient createIgnoreSSLClient = createIgnoreSSLClientWithPassword(username, password);
 
-        HttpGet httpGet = new HttpGet(baseZosmfUri + "restjobs/jobs");
+        HttpGet httpGet = new HttpGet(getFullUrl("restjobs/jobs"));
         httpGet.setHeader("X-CSRF-ZOSMF-HEADER", "");
         HttpResponse response = createIgnoreSSLClient.execute(httpGet);
         Header setCookieHeader = response.getFirstHeader("Set-Cookie");
@@ -112,14 +125,14 @@ public class ZosmfConnector {
 
         } }, new java.security.SecureRandom());
         return HttpClientBuilder.create().setSSLContext(sslcontext).setDefaultCredentialsProvider(credentialsProvider)
-                .setSSLHostnameVerifier(new HostnameVerifier() {
+            .setSSLHostnameVerifier(new HostnameVerifier() {
 
-                    @Override
-                    public boolean verify(String s1, SSLSession s2) {
-                        return true;
-                    }
+                @Override
+                public boolean verify(String s1, SSLSession s2) {
+                    return true;
+                }
 
-                }).build();
+            }).build();
     }
 
     public static HttpClient createIgnoreSSLClient() throws KeyManagementException, NoSuchAlgorithmException {
