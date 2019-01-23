@@ -11,6 +11,7 @@ target/
 
 # Gradle
 .gradle/
+gradle/wrapper/gradle-wrapper.jar
 .idea/
 
 ### STS ###
