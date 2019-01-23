@@ -1,5 +1,5 @@
 target/
-!.mvn/wrapper/maven-wrapper.jar
+.mvn/
 .history/
 **/.checkstyle
 
@@ -11,6 +11,7 @@ target/
 
 # Gradle
 .gradle/
+gradle/wrapper/gradle-wrapper.jar
 .idea/
 
 ### STS ###
