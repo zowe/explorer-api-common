@@ -106,7 +106,7 @@ properties(opts)
 
 pipeline {
     agent {
-        label 'ca-jenkins-agent'
+        label 'ibm-jenkins-slave-nvm-jnlp'
     }
 
     environment {
