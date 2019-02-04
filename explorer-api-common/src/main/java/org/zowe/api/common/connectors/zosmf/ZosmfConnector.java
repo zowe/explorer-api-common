@@ -121,8 +121,7 @@ public class ZosmfConnector {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    private HttpClientContext createPreemptiveHttpClientContext(CredentialsProvider credentialsProvider, URI targetUrl)
-            throws NoSuchAlgorithmException, KeyManagementException {
+    private HttpClientContext createPreemptiveHttpClientContext(CredentialsProvider credentialsProvider, URI targetUrl) {
         HttpHost targetHost = new HttpHost(targetUrl.getHost(), targetUrl.getPort(), targetUrl.getScheme());
         AuthCache authCache = new BasicAuthCache();
         authCache.put(targetHost, new BasicScheme());
