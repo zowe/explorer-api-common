@@ -14,6 +14,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
@@ -26,8 +27,10 @@ public class ResponseCache {
     private int statusCode;
     private String entityString;
     private HttpEntity entity;
+    private HttpResponse response;
 
     public ResponseCache(HttpResponse response) throws IOException {
+        this.response = response;
         this.statusCode = response.getStatusLine().getStatusCode();
         this.entity = response.getEntity();
         this.entityString = EntityUtils.toString(entity, "UTF-8");
@@ -59,5 +62,10 @@ public class ResponseCache {
 
     public ContentType getContentType() {
         return ContentType.get(entity);
+    }
+
+    // TODO - do we need to cache this?
+    public Header getFirstHeader(String name) {
+        return response.getFirstHeader(name);
     }
 }
