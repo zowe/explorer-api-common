@@ -18,8 +18,8 @@ public class ZoweApiErrorException extends ZoweApiRestException {
      */
     private static final long serialVersionUID = 7920567730386688530L;
 
-    // TODO - primarily used for tests, not sure of any dev use at the moment -
-    // refactor out in test sub folder?
+    // TODO MARK- primarily used for tests, not sure of any dev use at the moment -
+    // work out how to refactor out in test sub folder?
     public ZoweApiErrorException(ApiError apiError) {
         super(apiError.getStatus(), apiError.getMessage());
     }

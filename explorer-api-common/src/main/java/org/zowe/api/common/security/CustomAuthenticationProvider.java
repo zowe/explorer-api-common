@@ -34,6 +34,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     ZosmfConnector zosmfconnector;
 
+    // TODO - review exception/responses/logging https://github.com/zowe/explorer-api-common/issues/9
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
@@ -51,9 +53,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             } catch (Exception e) {
                 log.error("authenticate", e);
             }
-            throw new UsernameNotFoundException(username); // TODO improve
+            throw new UsernameNotFoundException(username);
         }
-        // TODO - review exception/responses?
         return null;
     }
 
