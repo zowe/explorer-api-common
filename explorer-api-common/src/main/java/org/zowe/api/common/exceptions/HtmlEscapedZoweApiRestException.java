@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018
+ * Copyright IBM Corporation 2019
  */
 package org.zowe.api.common.exceptions;
 
@@ -13,15 +13,15 @@ import org.springframework.http.HttpStatus;
 
 import java.io.UnsupportedEncodingException;
 
-public class NoZosmfResponseEntityException extends ZoweApiRestException {
+public class HtmlEscapedZoweApiRestException extends ZoweApiRestException {
 
     /**
-     *
+     * 
      */
-    private static final long serialVersionUID = 2568539995597255984L;
+    private static final long serialVersionUID = 1646047102943409655L;
 
-    public NoZosmfResponseEntityException(HttpStatus status, String path) throws UnsupportedEncodingException {
-        super(status, "There was no response from z/OSMF for the request ''{0}''", htmlEncodeString(path));
+    public HtmlEscapedZoweApiRestException(HttpStatus status, String message) throws UnsupportedEncodingException {
+        super(status, htmlEncodeString(message));
     }
 
 }

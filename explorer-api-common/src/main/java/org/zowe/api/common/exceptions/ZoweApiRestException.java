@@ -10,7 +10,12 @@
 package org.zowe.api.common.exceptions;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.util.HtmlUtils;
 import org.zowe.api.common.errors.ApiError;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 
 public class ZoweApiRestException extends ZoweApiException {
 
@@ -27,6 +32,10 @@ public class ZoweApiRestException extends ZoweApiException {
 
     public ApiError getApiError() {
         return ApiError.builder().status(status).message(getMessage()).build();
+    }
+
+    protected static String htmlEncodeString(String string) throws UnsupportedEncodingException {
+        return HtmlUtils.htmlEscape(URLDecoder.decode(string, StandardCharsets.UTF_8.name()));
     }
 
 }
