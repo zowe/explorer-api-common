@@ -31,9 +31,13 @@ public class ResponseCache {
 
     public ResponseCache(HttpResponse response) throws IOException {
         this.response = response;
-        this.statusCode = response.getStatusLine().getStatusCode();
+        if (response.getStatusLine() != null) {
+            this.statusCode = response.getStatusLine().getStatusCode();
+        }
         this.entity = response.getEntity();
-        this.entityString = EntityUtils.toString(entity, "UTF-8");
+        if (entity != null) {
+            this.entityString = EntityUtils.toString(entity, "UTF-8");
+        }
     }
 
     public int getStatus() {
