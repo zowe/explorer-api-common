@@ -19,6 +19,7 @@ import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
 import org.springframework.util.StringUtils;
 import org.zowe.api.common.connectors.zosmf.ZosmfConnector;
+import org.zowe.api.common.exceptions.HtmlEscapedZoweApiRestException;
 import org.zowe.api.common.exceptions.NoZosmfResponseEntityException;
 import org.zowe.api.common.exceptions.ServerErrorException;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
@@ -81,11 +82,11 @@ public abstract class AbstractZosmfRequestRunner<T> {
                 }
                 if (jsonResponse.has("message")) {
                     String zosmfMessage = jsonResponse.get("message").getAsString();
-                    return new ZoweApiRestException(springStatus, zosmfMessage);
+                    return new HtmlEscapedZoweApiRestException(springStatus, zosmfMessage);
                 }
-                return new ZoweApiRestException(springStatus, jsonResponse.toString());
+                return new HtmlEscapedZoweApiRestException(springStatus, jsonResponse.toString());
             } else {
-                return new ZoweApiRestException(springStatus, entityString);
+                return new HtmlEscapedZoweApiRestException(springStatus, entityString);
             }
         } else {
             return new NoZosmfResponseEntityException(springStatus, uri.toString());
