@@ -57,6 +57,8 @@ public abstract class AbstractZosmfRequestRunner<T> {
         if (success) {
             return getResult(responseCache);
         } else {
+            log.error("processResponse", "recieved response code", statusCode, "receieved response message",
+                    responseCache.getEntity());
             throw createGeneralException(responseCache, uri);
         }
     }
