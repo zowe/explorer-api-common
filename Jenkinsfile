@@ -46,10 +46,25 @@ node('ibm-jenkins-slave-nvm') {
 
   // define we need publish stage
   pipeline.publish(
-    // NOTE: task publishArtifacts will publish to lib-release-local because we don't have SNAPSHOT in version
-    artifacts: [
-      'explorer-api-common/build/libs/explorer-api-common-*.jar'
-    ]
+    operation: {
+      def version = env.PUBLISH_VERSION
+      if (version) {
+        echo "Publishing ${version} ..."
+      } else {
+        error 'Unable to determine publish version'
+      }
+
+      pipeline.gradle._updateVersion(version)
+      withCredentials([
+        usernamePassword(
+          credentialsId: lib.Constants.DEFAULT_ARTIFACTORY_ROBOT_CREDENTIAL,
+          usernameVariable: 'USERNAME',
+          passwordVariable: 'PASSWORD'
+        )
+      ]) {
+          sh "./gradlew publishArtifacts -Pdeploy.username=$USERNAME -Pdeploy.password=$PASSWORD"
+      }
+    }
   )
 
   // define we need release stage
