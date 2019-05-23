@@ -12,7 +12,7 @@
 
 
 node('ibm-jenkins-slave-nvm') {
-  def lib = library("jenkins-library").org.zowe.jenkins_shared_library
+  def lib = library("jenkins-library@features/maven-info").org.zowe.jenkins_shared_library
 
   def pipeline = lib.pipelines.gradle.GradlePipeline.new(this)
 
@@ -47,14 +47,6 @@ node('ibm-jenkins-slave-nvm') {
   // define we need publish stage
   pipeline.publish(
     operation: {
-      def version = env.PUBLISH_VERSION
-      if (version) {
-        echo "Publishing ${version} ..."
-      } else {
-        error 'Unable to determine publish version'
-      }
-
-      pipeline.gradle._updateVersion(version)
       withCredentials([
         usernamePassword(
           credentialsId: lib.Constants.DEFAULT_ARTIFACTORY_ROBOT_CREDENTIAL,
