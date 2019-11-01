@@ -252,8 +252,22 @@ pipeline {
                 }
             }
             steps {
-                withSonarQubeEnv('sonar-default-server') {
-                    sh "./gradlew --info sonarqube -Psonar.host.url=${SONAR_HOST_URL} -Psonar.login=${SONAR_AUTH_TOKEN}"
+                withSonarQubeEnv('sonarcloud-server') {
+                    script {
+                        if (env.CHANGE_BRANCH) { // is pull request
+                            sh "./gradlew --info sonarqube" +
+                                " -Psonar.host.url=${SONAR_HOST_URL}" +
+                                " -Psonar.login=${SONAR_AUTH_TOKEN}" +
+                                " -Psonar.pullrequest.key=${env.CHANGE_ID}" +
+                                " -Psonar.pullrequest.branch=${env.CHANGE_BRANCH}" +
+                                " -Psonar.pullrequest.base=${env.CHANGE_TARGET}"
+                        } else { // a branch build
+                            sh "./gradlew --info sonarqube" +
+                                " -Psonar.host.url=${SONAR_HOST_URL}" +
+                                " -Psonar.login=${SONAR_AUTH_TOKEN}" +
+                                " -Psonar.branch.name=${env.BRANCH_NAME}"
+                        }
+                    }
                 }
             }
         }
