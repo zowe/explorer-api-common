@@ -77,7 +77,7 @@ node('ibm-jenkins-slave-nvm') {
           passwordVariable : 'PASSWORD'
         )
       ]) {
-        // sh "./gradlew publishArtifacts -Pdeploy.username=$USERNAME -Pdeploy.password=$PASSWORD"
+        sh "./gradlew publishArtifacts -Pdeploy.username=$USERNAME -Pdeploy.password=$PASSWORD"
       }
     }
   )
