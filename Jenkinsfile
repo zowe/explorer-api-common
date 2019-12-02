@@ -37,9 +37,12 @@ node('ibm-jenkins-slave-nvm') {
     isSkippable: false,
     stage: {
       def publishPath = pipeline.getPublishTargetPath()
-      def customVersion = publishPath.split('/').last() + "-SNAPSHOT"
+      def customVersion = publishPath.split('/').last()
       if (!customVersion) {
         error 'Cannot determine release version'
+      }
+      if (!customVersion.endsWith('-SNAPSHOT')) {
+        customVersion = "${customVersion}-SNAPSHOT".toString()
       }
       pipeline.setVersion(customVersion)
       pipeline.gradle._updateVersion(customVersion)
