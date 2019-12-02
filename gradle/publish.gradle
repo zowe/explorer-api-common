@@ -31,10 +31,10 @@ configure(subprojects.findAll { it.name in projectsToPublish }) {
                 username project.hasProperty("deploy.username") ? project.getProperty("deploy.username") : mavenPublishUser
                 password  project.hasProperty("deploy.password") ? project.getProperty("deploy.password") : mavenPublishPassword
             }
-            if (rootProject.version.endsWith("-SNAPSHOT")) {
-                setUrl(artifactoryPublishingMavenSnapshotRepo)
-            } else {
+            if (rootProject.version =~ '^[0-9]+\\.[0-9]+\\.[0-9]+$' ) {
                 setUrl(artifactoryPublishingMavenRepo)
+            } else {
+                setUrl(artifactoryPublishingMavenSnapshotRepo)
             }
         }
     }
