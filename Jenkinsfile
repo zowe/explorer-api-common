@@ -37,7 +37,7 @@ node('ibm-jenkins-slave-nvm') {
     isSkippable: false,
     stage: {
       def publishPath = pipeline.getPublishTargetPath()
-      def customVersion = publishPath.split('/').last()
+      def customVersion = publishPath.split('/').last() + "-SNAPSHOT"
       if (!customVersion) {
         error 'Cannot determine release version'
       }
