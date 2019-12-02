@@ -52,7 +52,7 @@ node('ibm-jenkins-slave-nvm') {
   pipeline.test(
     name          : 'Unit',
     operation     : {
-      sh './gradlew coverage'
+      sh './gradlew test'
     },
     allowMissingJunit : true
   )
@@ -62,14 +62,6 @@ node('ibm-jenkins-slave-nvm') {
     scannerServer   : lib.Constants.DEFAULT_LFJ_SONARCLOUD_SERVER,
     allowBranchScan : lib.Constants.DEFAULT_LFJ_SONARCLOUD_ALLOW_BRANCH,
     failBuild       : lib.Constants.DEFAULT_LFJ_SONARCLOUD_FAIL_BUILD
-  )
-
-  // how we packaging jars/zips
-  pipeline.packaging(
-    name: 'explorer-jobs',
-    operation: {
-      sh './gradlew packageJobsApiServer'
-    }
   )
 
   // define we need publish stage

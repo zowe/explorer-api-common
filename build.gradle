@@ -112,8 +112,8 @@ task coverage() {
 }
 
 task publishAllVersions {
-    group 'Zoe Publishing'
-    description 'Publish SDK libraries for all version of Spring Boot to Zoe Artifactory'
+    group 'Zowe Publishing'
+    description 'Publish SDK libraries for all version of Spring Boot to Zowe Artifactory'
     doLast {
         println 'Published all versions of SDK'
     }
