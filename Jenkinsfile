@@ -29,6 +29,9 @@ node('ibm-jenkins-slave-nvm') {
     ]
   )
 
+  // This step is special distinguished from GradlePipeline. The purpose of this
+  // step is set correct version pattern so Gradle publish stage works. This is
+  // requird if we don't use GradlePipeline default publish method.
   pipeline.createStage(
     name: "Setup Version",
     isSkippable: false,
@@ -69,7 +72,7 @@ node('ibm-jenkins-slave-nvm') {
     operation: {
       withCredentials([
         usernamePassword(
-          credentialsId    : DEFAULT_ARTIFACTORY_ROBOT_CREDENTIAL,
+          credentialsId    : lib.Constants.DEFAULT_ARTIFACTORY_ROBOT_CREDENTIAL,
           usernameVariable : 'USERNAME',
           passwordVariable : 'PASSWORD'
         )
