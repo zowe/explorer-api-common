@@ -24,8 +24,8 @@ node('ibm-jenkins-slave-nvm') {
       usernamePasswordCredential : lib.Constants.DEFAULT_GITHUB_ROBOT_CREDENTIAL,
     ],
     artifactory: [
-      url                        : lib.Constants.DEFAULT_ARTIFACTORY_URL,
-      usernamePasswordCredential : lib.Constants.DEFAULT_ARTIFACTORY_ROBOT_CREDENTIAL,
+      url                        : lib.Constants.DEFAULT_LFJ_ARTIFACTORY_URL,
+      usernamePasswordCredential : lib.Constants.DEFAULT_LFJ_ARTIFACTORY_ROBOT_CREDENTIAL,
     ]
   )
 
@@ -52,7 +52,7 @@ node('ibm-jenkins-slave-nvm') {
     operation: {
       withCredentials([
         usernamePassword(
-          credentialsId    : lib.Constants.DEFAULT_ARTIFACTORY_ROBOT_CREDENTIAL,
+          credentialsId    : lib.Constants.DEFAULT_LFJ_ARTIFACTORY_ROBOT_CREDENTIAL,
           usernameVariable : 'USERNAME',
           passwordVariable : 'PASSWORD'
         )
