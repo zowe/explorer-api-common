@@ -12,7 +12,7 @@
 
 
 node('ibm-jenkins-slave-nvm') {
-  def lib = library("jenkins-library@users/jack/maven-version").org.zowe.jenkins_shared_library
+  def lib = library("jenkins-library").org.zowe.jenkins_shared_library
 
   def pipeline = lib.pipelines.gradle.GradlePipeline.new(this)
 
