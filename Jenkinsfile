@@ -12,7 +12,7 @@
 
 
 node('ibm-jenkins-slave-nvm') {
-  def lib = library("jenkins-library").org.zowe.jenkins_shared_library
+  def lib = library("jenkins-library@users/jack/maven-version").org.zowe.jenkins_shared_library
 
   def pipeline = lib.pipelines.gradle.GradlePipeline.new(this)
 
@@ -27,29 +27,6 @@ node('ibm-jenkins-slave-nvm') {
       url                        : lib.Constants.DEFAULT_ARTIFACTORY_URL,
       usernamePasswordCredential : lib.Constants.DEFAULT_ARTIFACTORY_ROBOT_CREDENTIAL,
     ]
-  )
-
-  // This step is special distinguished from GradlePipeline. The purpose of this
-  // step is set correct version pattern so Gradle publish stage works. This is
-  // requird if we don't use GradlePipeline default publish method.
-  pipeline.createStage(
-    name: "Setup Version",
-    isSkippable: false,
-    stage: {
-      def publishPath = pipeline.getPublishTargetPath()
-      def customVersion = publishPath.split('/').last()
-      if (!customVersion) {
-        error 'Cannot determine release version'
-      }
-      if (!customVersion.endsWith('-SNAPSHOT')) {
-        customVersion = "${customVersion}-SNAPSHOT".toString()
-      }
-      pipeline.setVersion(customVersion)
-      pipeline.gradle._updateVersion(customVersion)
-      echo "Version defined in gradle.properties is:"
-      sh 'cat gradle.properties | grep version='
-    },
-    timeout: [time: 2, unit: 'MINUTES']
   )
 
   // we have a custom build command
