@@ -25,9 +25,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     CustomAuthenticationProvider authenticationProvider;
 
-    @Autowired
-    private AuthenticationEntryPoint authEntryPoint;
-
     private static final String[] AUTH_WHITELIST = {
             // -- swagger ui
             "/swagger-resources/**", "/swagger-ui.html", "/v2/api-docs", "/webjars/**"};
@@ -35,9 +32,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // TODO - re-enable csrf?
-        http.csrf().disable().authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll().antMatchers("/api/**/*")
-                .authenticated().and().httpBasic().authenticationEntryPoint(authEntryPoint).and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/**/logout"));
+        http.csrf().disable().authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
+            .antMatchers("/api/**/*").permitAll().and()
+            .logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/**/logout"));
     }
 
     @Autowired

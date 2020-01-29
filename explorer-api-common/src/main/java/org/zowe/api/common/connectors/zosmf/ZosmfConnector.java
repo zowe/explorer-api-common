@@ -9,6 +9,7 @@
  */
 package org.zowe.api.common.connectors.zosmf;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.http.Header;
@@ -46,10 +47,12 @@ import java.security.cert.X509Certificate;
 
 @Slf4j
 @Service
+@Setter
 public class ZosmfConnector {
 
     private final String zosmfHost;
     private final int zosmfPort;
+    private String authToken;
 
     public URI getFullUrl(String relativePath) throws URISyntaxException {
         return getFullUrl(relativePath, null);
@@ -57,7 +60,7 @@ public class ZosmfConnector {
 
     public URI getFullUrl(String relativePath, String query) throws URISyntaxException {
         try {
-            return new URI("https", null, zosmfHost, zosmfPort, "/zosmf/" + relativePath, query, null);
+            return new URI("https", null, zosmfHost, 9554, "/api/v1/zosmf/" + relativePath, query, null);
         } catch (URISyntaxException e) {
             log.error("getFullUrl", e);
             throw e;
@@ -72,9 +75,7 @@ public class ZosmfConnector {
 
     public HttpResponse request(RequestBuilder requestBuilder) throws IOException {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUser customUser = (CustomUser) authentication.getPrincipal();
-        requestBuilder.setHeader("Cookie", customUser.getLtpa());
+        requestBuilder.setHeader("Cookie", "apimlAuthenticationToken=" + this.authToken);
         requestBuilder.setHeader("X-CSRF-ZOSMF-HEADER", "");
         requestBuilder.setHeader("X-IBM-Response-Timeout", "600");
 
