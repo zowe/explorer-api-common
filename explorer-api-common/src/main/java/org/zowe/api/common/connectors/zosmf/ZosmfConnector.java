@@ -23,6 +23,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zowe.api.common.connectors.zosmf.exceptions.ZosmfConnectionException;
+import org.zowe.api.common.exceptions.NoAuthTokenException;
 
 import javax.net.ssl.*;
 import javax.servlet.http.HttpServletRequest;
@@ -68,10 +69,14 @@ public class ZosmfConnector {
     }
     
     private String getAuthTokenFromHeaders() {
-        String headers = request.getHeader("cookie");
-        String cookies[] = headers.split(";");
-        Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
-        return authTokenCookie.get().split("=")[1];
+        try {
+            String headers = request.getHeader("cookie");
+            String cookies[] = headers.split(";");
+            Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
+            return authTokenCookie.get().split("=")[1];
+        } catch (Exception e) {
+            throw new NoAuthTokenException();
+        }
     }
 
     public HttpResponse request(RequestBuilder requestBuilder) throws IOException {
