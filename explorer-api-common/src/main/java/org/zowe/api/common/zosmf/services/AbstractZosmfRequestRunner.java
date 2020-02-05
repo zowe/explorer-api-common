@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.zowe.api.common.connectors.zosmf.ZosmfConnector;
 import org.zowe.api.common.exceptions.HtmlEscapedZoweApiRestException;
@@ -31,13 +30,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.stream.IntStream;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Slf4j
 public abstract class AbstractZosmfRequestRunner<T> {
-    
-    @Autowired
-    private HttpServletRequest request;
 
     public T run(ZosmfConnector zosmfConnector) {
         try {

@@ -34,6 +34,8 @@ import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -42,7 +44,6 @@ public class ZosmfConnector {
 
     private final String gatewayHost;
     private final int gatewayPort;
-    private String authToken;
 
     @Autowired
     private HttpServletRequest request;
@@ -65,10 +66,17 @@ public class ZosmfConnector {
         gatewayHost = properties.getIpAddress();
         gatewayPort = properties.getHttpsPort();
     }
+    
+    private String getAuthTokenFromHeaders() {
+        String headers = request.getHeader("cookie");
+        String cookies[] = headers.split(";");
+        Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
+        return authTokenCookie.get().split("=")[1];
+    }
 
     public HttpResponse request(RequestBuilder requestBuilder) throws IOException {
 
-        requestBuilder.setHeader("Authorization", "Bearer " + this.authToken);
+        requestBuilder.setHeader("Authorization", "Bearer " + getAuthTokenFromHeaders());
         requestBuilder.setHeader("X-CSRF-ZOSMF-HEADER", "");
         requestBuilder.setHeader("X-IBM-Response-Timeout", "600");
 
