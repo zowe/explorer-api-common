@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.zowe.api.common.connectors.zosmf.exceptions.ZosmfConnectionException;
 
 import javax.net.ssl.*;
+import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.net.URI;
@@ -33,6 +34,8 @@ import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -41,8 +44,10 @@ public class ZosmfConnector {
 
     private final String gatewayHost;
     private final int gatewayPort;
-    private String authToken;
 
+    @Autowired
+    private HttpServletRequest request;
+    
     public URI getFullUrl(String relativePath) throws URISyntaxException {
         return getFullUrl(relativePath, null);
     }
@@ -61,10 +66,17 @@ public class ZosmfConnector {
         gatewayHost = properties.getIpAddress();
         gatewayPort = properties.getHttpsPort();
     }
+    
+    private String getAuthTokenFromHeaders() {
+        String headers = request.getHeader("cookie");
+        String cookies[] = headers.split(";");
+        Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
+        return authTokenCookie.get().split("=")[1];
+    }
 
     public HttpResponse request(RequestBuilder requestBuilder) throws IOException {
 
-        requestBuilder.setHeader("Authorization", "Bearer " + this.authToken);
+        requestBuilder.setHeader("Authorization", "Bearer " + getAuthTokenFromHeaders());
         requestBuilder.setHeader("X-CSRF-ZOSMF-HEADER", "");
         requestBuilder.setHeader("X-IBM-Response-Timeout", "600");
 
