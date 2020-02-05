@@ -64,7 +64,7 @@ public class ZosmfConnector {
 
     public HttpResponse request(RequestBuilder requestBuilder) throws IOException {
 
-        requestBuilder.setHeader("Cookie", "apimlAuthenticationToken=" + this.authToken);
+        requestBuilder.setHeader("Authorization", "Bearer " + this.authToken);
         requestBuilder.setHeader("X-CSRF-ZOSMF-HEADER", "");
         requestBuilder.setHeader("X-IBM-Response-Timeout", "600");
 
