@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.zowe.api.common.connectors.zosmf.exceptions.ZosmfConnectionException;
 
 import javax.net.ssl.*;
+import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.net.URI;
@@ -43,6 +44,9 @@ public class ZosmfConnector {
     private final int gatewayPort;
     private String authToken;
 
+    @Autowired
+    private HttpServletRequest request;
+    
     public URI getFullUrl(String relativePath) throws URISyntaxException {
         return getFullUrl(relativePath, null);
     }
