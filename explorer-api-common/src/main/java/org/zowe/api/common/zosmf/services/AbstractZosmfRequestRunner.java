@@ -9,6 +9,7 @@
  */
 package org.zowe.api.common.zosmf.services;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -20,6 +21,7 @@ import org.apache.http.entity.ContentType;
 import org.springframework.util.StringUtils;
 import org.zowe.api.common.connectors.zosmf.ZosmfConnector;
 import org.zowe.api.common.exceptions.HtmlEscapedZoweApiRestException;
+import org.zowe.api.common.exceptions.InvalidAuthTokenException;
 import org.zowe.api.common.exceptions.NoZosmfResponseEntityException;
 import org.zowe.api.common.exceptions.ServerErrorException;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
@@ -78,6 +80,16 @@ public abstract class AbstractZosmfRequestRunner<T> {
             if (mimeType.equals(ContentType.APPLICATION_JSON.getMimeType())) {
                 JsonObject jsonResponse = responseCache.getEntityAsJsonObject();
 
+                if (springStatus == org.springframework.http.HttpStatus.UNAUTHORIZED && jsonResponse.has("messages")) {
+                    JsonArray messagesArray = jsonResponse.get("messages").getAsJsonArray();
+                    if (messagesArray.get(0).getAsJsonObject().has("messageNumber")) {
+                        if (messagesArray.get(0).getAsJsonObject().get("messageNumber").getAsString().equals("ZWEAG102E")) {
+                            System.out.println("Token is not valid exception");
+                            return new InvalidAuthTokenException();
+                        }
+                    }
+                }
+                
                 ZoweApiRestException exception = createException(jsonResponse, responseCache.getStatus());
                 if (exception != null) {
                     return exception;

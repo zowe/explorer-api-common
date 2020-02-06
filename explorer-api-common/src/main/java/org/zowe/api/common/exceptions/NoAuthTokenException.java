@@ -10,7 +10,7 @@ public class NoAuthTokenException extends ZoweApiRestException{
     private static final long serialVersionUID = 2927394757111102057L;
 
     public NoAuthTokenException() {
-        super(HttpStatus.UNAUTHORIZED, "No \"apimlAuthenticationToken\" provided");
+        super(HttpStatus.UNAUTHORIZED, "No 'apimlAuthenticationToken' provided");
     }
 
 }
