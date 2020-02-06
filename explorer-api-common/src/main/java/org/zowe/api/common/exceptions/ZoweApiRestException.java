@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2015, 2018
+ * Copyright IBM Corporation 2015, 2020
  */
 package org.zowe.api.common.exceptions;
 
@@ -27,6 +27,11 @@ public class ZoweApiRestException extends ZoweApiException {
 
     public ZoweApiRestException(HttpStatus status, String message, Object... messageArguments) {
         super(message, messageArguments);
+        this.status = status;
+    }
+
+    public ZoweApiRestException(HttpStatus status, String message) {
+        super(message, Object.class);
         this.status = status;
     }
 
