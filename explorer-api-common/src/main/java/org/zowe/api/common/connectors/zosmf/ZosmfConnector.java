@@ -70,7 +70,7 @@ public class ZosmfConnector {
 
     private String getAuthTokenFromHeaders() {
         String headers = request.getHeader("cookie");
-        String cookies[] = headers.split(";");
+        String[] cookies = headers.split(";");
         Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
         if(authTokenCookie.isPresent()) {
         return authTokenCookie.get().split("=")[1];

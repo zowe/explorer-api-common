@@ -71,6 +71,17 @@ public abstract class AbstractZosmfRequestRunner<T> {
         return null;
     }
 
+    protected Boolean wasRequestUnauthorised(org.springframework.http.HttpStatus springStatus, JsonObject jsonResponse) {
+        if (springStatus == org.springframework.http.HttpStatus.UNAUTHORIZED && jsonResponse.has("messages")) {
+            JsonArray messagesArray = jsonResponse.get("messages").getAsJsonArray();
+            if (messagesArray.get(0).getAsJsonObject().has("messageNumber") &&
+                messagesArray.get(0).getAsJsonObject().get("messageNumber").getAsString().equals("ZWEAG102E")) {
+                    return true;
+                }
+        }
+        return false;
+    }
+
     protected ZoweApiRestException createGeneralException(ResponseCache responseCache, URI uri) throws IOException {
         String entityString = responseCache.getEntity();
         org.springframework.http.HttpStatus springStatus = responseCache.getSpringHttpStatus();
@@ -80,14 +91,8 @@ public abstract class AbstractZosmfRequestRunner<T> {
             if (mimeType.equals(ContentType.APPLICATION_JSON.getMimeType())) {
                 JsonObject jsonResponse = responseCache.getEntityAsJsonObject();
 
-                if (springStatus == org.springframework.http.HttpStatus.UNAUTHORIZED && jsonResponse.has("messages")) {
-                    JsonArray messagesArray = jsonResponse.get("messages").getAsJsonArray();
-                    if (messagesArray.get(0).getAsJsonObject().has("messageNumber")) {
-                        if (messagesArray.get(0).getAsJsonObject().get("messageNumber").getAsString().equals("ZWEAG102E")) {
-                            System.out.println("Token is not valid exception");
-                            return new InvalidAuthTokenException();
-                        }
-                    }
+                if (wasRequestUnauthorised(springStatus, jsonResponse)) {
+                    return new InvalidAuthTokenException();
                 }
                 ZoweApiRestException exception = createException(jsonResponse, responseCache.getStatus());
                 if (exception != null) {
