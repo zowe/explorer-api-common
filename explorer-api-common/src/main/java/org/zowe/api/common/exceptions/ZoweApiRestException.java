@@ -30,11 +30,6 @@ public class ZoweApiRestException extends ZoweApiException {
         this.status = status;
     }
 
-    public ZoweApiRestException(HttpStatus status, String message) {
-        super(message, Object.class);
-        this.status = status;
-    }
-
     public ApiError getApiError() {
         return ApiError.builder().status(status).message(getMessage()).build();
     }
