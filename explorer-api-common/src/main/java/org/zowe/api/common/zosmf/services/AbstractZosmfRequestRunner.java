@@ -91,7 +91,7 @@ public abstract class AbstractZosmfRequestRunner<T> {
             if (mimeType.equals(ContentType.APPLICATION_JSON.getMimeType())) {
                 JsonObject jsonResponse = responseCache.getEntityAsJsonObject();
 
-                if (wasRequestUnauthorised(springStatus, jsonResponse)) {
+                if (Boolean.TRUE.equals(wasRequestUnauthorised(springStatus, jsonResponse))) {
                     return new InvalidAuthTokenException();
                 }
                 ZoweApiRestException exception = createException(jsonResponse, responseCache.getStatus());
