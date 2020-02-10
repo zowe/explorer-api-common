@@ -17,7 +17,6 @@ import org.junit.BeforeClass;
 import org.zowe.api.common.errors.ApiError;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
 
-import static io.restassured.RestAssured.preemptive;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public abstract class AbstractHttpIntegrationTest {
@@ -35,7 +34,10 @@ public abstract class AbstractHttpIntegrationTest {
         RestAssured.port = Integer.valueOf(SERVER_PORT);
         RestAssured.baseURI = BASE_URL;
         RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.authentication = preemptive().basic(USER, PASSWORD);
+        Response response = RestAssured.given().contentType("application/json")
+                .body("{\"username\":\"" + USER + "\",\"password\":\"" + PASSWORD + "\"}")
+                .when().post(BASE_URL + "gateway/auth/login");
+        System.out.println(response.asString());
     }
 
     protected void verifyExceptionReturn(ZoweApiRestException expected, Response response) {
