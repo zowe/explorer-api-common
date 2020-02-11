@@ -16,6 +16,7 @@ import io.restassured.response.Response;
 import static org.junit.Assert.assertEquals;
 
 import org.apache.http.HttpStatus;
+import org.junit.BeforeClass;
 import org.zowe.api.common.errors.ApiError;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
 
@@ -30,15 +31,20 @@ public abstract class AbstractHttpIntegrationTest {
 
     protected final static String USER = System.getProperty("server.username");
     private final static String PASSWORD = System.getProperty("server.password");
-    protected final String AUTH_TOKEN;
+    protected final static String AUTH_TOKEN = getGatewayAuthToken();
     
-    public AbstractHttpIntegrationTest() {
+    private static String getGatewayAuthToken() {
+        RestAssured.useRelaxedHTTPSValidation();
         Response response = RestAssured.given().contentType("application/json")
                 .body("{\"username\":\"" + USER + "\",\"password\":\"" + PASSWORD + "\"}")
                 .when().post(BASE_URL + "gateway/auth/login");
         assertEquals(response.getStatusCode(), HttpStatus.SC_NO_CONTENT);
-        this.AUTH_TOKEN = response.getCookie("apimlAuthenticationToken");
-        System.out.println(this.AUTH_TOKEN);
+        return response.getCookie("apimlAuthenticationToken");
+    }
+    
+    @BeforeClass
+    public static void setupRestAssured() {
+        RestAssured.baseURI = BASE_URL;
     }
 
     protected void verifyExceptionReturn(ZoweApiRestException expected, Response response) {

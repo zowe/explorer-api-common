@@ -9,16 +9,11 @@
  */
 package org.zowe.api.common.connectors.zosmf;
 
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -68,18 +63,25 @@ public class ZosmfConnector {
         gatewayPort = properties.getHttpsPort();
     }
 
-    private String getAuthTokenFromHeaders() {
-        String headers = request.getHeader("cookie");
-        String[] cookies = headers.split(";");
-        Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
-        if(authTokenCookie.isPresent()) {
-        return authTokenCookie.get().split("=")[1];
+    private String getAuthorizationValueFromHeaders() {
+        String cookieHeader = request.getHeader("cookie");
+        if (!cookieHeader.isEmpty()) {
+            String[] cookies = cookieHeader.split(";");
+            Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
+            if(authTokenCookie.isPresent()) {
+                return "Bearer " + authTokenCookie.get().split("=")[1];
+            }
+        } else {
+            String header = request.getHeader("authorization");
+            if(!header.isEmpty()) {
+               return header;
+            }
         }
         throw new NoAuthTokenException();
     }
 
     public HttpResponse request(RequestBuilder requestBuilder) throws IOException {
-        requestBuilder.setHeader("Authorization", "Bearer " + getAuthTokenFromHeaders());
+        requestBuilder.setHeader("Authorization", getAuthorizationValueFromHeaders());
         requestBuilder.setHeader("X-CSRF-ZOSMF-HEADER", "");
         requestBuilder.setHeader("X-IBM-Response-Timeout", "600");
 
