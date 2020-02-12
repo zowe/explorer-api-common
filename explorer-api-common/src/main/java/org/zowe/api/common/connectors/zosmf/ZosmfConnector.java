@@ -64,14 +64,16 @@ public class ZosmfConnector {
     }
 
     private String getAuthorizationValueFromHeaders() {
+        // If user is passing jwt as a cookie
         String cookieHeader = request.getHeader("cookie");
-        if (!cookieHeader.isEmpty()) {
+        if (cookieHeader != null && !cookieHeader.isEmpty()) {
             String[] cookies = cookieHeader.split(";");
             Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
             if(authTokenCookie.isPresent()) {
                 return "Bearer " + authTokenCookie.get().split("=")[1];
             }
         } else {
+            // If user is passing jwt in Authorization header 
             String header = request.getHeader("authorization");
             if(!header.isEmpty()) {
                return header;
