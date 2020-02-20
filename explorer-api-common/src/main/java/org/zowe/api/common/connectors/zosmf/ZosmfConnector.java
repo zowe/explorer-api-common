@@ -75,7 +75,7 @@ public class ZosmfConnector {
         } else {
             // If user is passing jwt in Authorization header 
             String header = request.getHeader("authorization");
-            if(!header.isEmpty()) {
+            if(header != null && !header.isEmpty()) {
                return header;
             }
         }
