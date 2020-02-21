@@ -33,13 +33,7 @@ public abstract class AbstractHttpIntegrationTest {
     private final static String PASSWORD = System.getProperty("server.password");
     protected final static String AUTH_TOKEN = getGatewayAuthToken();
     
-    private static String getGatewayAuthToken() {
-        System.out.println("getGatewayAuthToken");
-        System.out.println(SERVER_HOST);
-        System.out.println(SERVER_PORT);
-        System.out.println(BASE_URL);
-        System.out.println(BASE_URL+"gateway/auth/login");
-        
+    private static String getGatewayAuthToken() {        
         RestAssured.useRelaxedHTTPSValidation();
         Response response = RestAssured.given().contentType("application/json")
                 .body("{\"username\":\"" + USER + "\",\"password\":\"" + PASSWORD + "\"}")
