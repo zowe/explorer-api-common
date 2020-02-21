@@ -9,6 +9,7 @@
  */
 package org.zowe.api.common.connectors.zosmf;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.http.HttpResponse;
@@ -38,7 +39,7 @@ import java.util.Optional;
 public class ZosmfConnector {
 
     private final String gatewayHost;
-    private final int gatewayPort;
+    @Getter private final int gatewayPort;
 
     @Autowired
     private HttpServletRequest request;
