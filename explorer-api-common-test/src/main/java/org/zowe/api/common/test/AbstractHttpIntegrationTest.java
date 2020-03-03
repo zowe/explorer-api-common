@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2019
+ * Copyright IBM Corporation 2018, 2020
  */
 package org.zowe.api.common.test;
 
@@ -13,11 +13,13 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 
+import static org.junit.Assert.assertEquals;
+
+import org.apache.http.HttpStatus;
 import org.junit.BeforeClass;
 import org.zowe.api.common.errors.ApiError;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
 
-import static io.restassured.RestAssured.preemptive;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public abstract class AbstractHttpIntegrationTest {
@@ -29,13 +31,20 @@ public abstract class AbstractHttpIntegrationTest {
 
     protected final static String USER = System.getProperty("server.username");
     private final static String PASSWORD = System.getProperty("server.password");
-
-    @BeforeClass
-    public static void setUpConnection() {
-        RestAssured.port = Integer.valueOf(SERVER_PORT);
-        RestAssured.baseURI = BASE_URL;
+    protected final static String AUTH_TOKEN = getGatewayAuthToken();
+    
+    private static String getGatewayAuthToken() {        
         RestAssured.useRelaxedHTTPSValidation();
-        RestAssured.authentication = preemptive().basic(USER, PASSWORD);
+        Response response = RestAssured.given().contentType("application/json")
+                .body("{\"username\":\"" + USER + "\",\"password\":\"" + PASSWORD + "\"}")
+                .when().post(BASE_URL + "gateway/auth/login");
+        assertEquals(response.getStatusCode(), HttpStatus.SC_NO_CONTENT);
+        return response.getCookie("apimlAuthenticationToken");
+    }
+    
+    @BeforeClass
+    public static void setupRestAssured() {
+        RestAssured.baseURI = BASE_URL;
     }
 
     protected void verifyExceptionReturn(ZoweApiRestException expected, Response response) {

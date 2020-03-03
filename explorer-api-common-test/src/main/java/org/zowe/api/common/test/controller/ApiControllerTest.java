@@ -5,20 +5,17 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2019
+ * Copyright IBM Corporation 2018, 2020
  */
 package org.zowe.api.common.test.controller;
 
 import org.junit.Before;
 import org.mockito.MockitoAnnotations;
-import org.powermock.api.mockito.PowerMockito;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.zowe.api.common.exceptions.ZoweRestExceptionHandler;
 import org.zowe.api.common.test.ZoweApiTest;
-import org.zowe.api.common.utils.ZosUtils;
 
-import static org.mockito.Mockito.when;
 
 public abstract class ApiControllerTest extends ZoweApiTest {
 
@@ -32,8 +29,6 @@ public abstract class ApiControllerTest extends ZoweApiTest {
         MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(getController()).setControllerAdvice(new ZoweRestExceptionHandler())
             .build();
-        PowerMockito.mockStatic(ZosUtils.class);
-        when(ZosUtils.getUsername()).thenReturn(DUMMY_USER);
     }
 
     public abstract Object getController();
