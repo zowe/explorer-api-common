@@ -19,10 +19,10 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
+import org.springframework.util.Base64Utils;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
-import java.util.Base64;
 
 public class ResponseCache {
 
@@ -41,7 +41,7 @@ public class ResponseCache {
             if (isOctetStream()) {
                 // binary data to base64 string
                 byte[] entityContent = EntityUtils.toByteArray(entity);
-                this.entityString = Base64.getEncoder().encodeToString(entityContent);
+                this.entityString = Base64Utils.encodeToString(entityContent);
             } else {
                 this.entityString = EntityUtils.toString(entity, "UTF-8");
             }
