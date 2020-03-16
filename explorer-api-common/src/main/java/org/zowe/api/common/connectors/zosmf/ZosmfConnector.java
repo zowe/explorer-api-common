@@ -42,6 +42,7 @@ import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 @Slf4j
@@ -144,11 +145,11 @@ public class ZosmfConnector {
         SSLContext sslcontext = SSLContext.getInstance("TLS");
         sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
             @Override
-            public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
+            public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
             }
 
             @Override
-            public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
+            public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
             }
 
             @Override
@@ -177,11 +178,11 @@ public class ZosmfConnector {
         SSLContext sslcontext = SSLContext.getInstance("TLS");
         sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
             @Override
-            public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
+            public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
             }
 
             @Override
-            public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
+            public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
             }
 
             @Override
@@ -205,11 +206,11 @@ public class ZosmfConnector {
         SSLContext sslcontext = SSLContext.getInstance("TLS");
         sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
             @Override
-            public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
+            public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
             }
 
             @Override
-            public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
+            public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {
             }
 
             @Override
