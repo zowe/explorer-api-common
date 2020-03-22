@@ -11,7 +11,7 @@ package org.zowe.api.common.exceptions;
 
 import org.springframework.http.HttpStatus;
 
-public class NoAuthTokenException extends ZoweApiRestException{
+public class NoAuthTokenException extends ZoweApiRestException {
 
     /**
      * 

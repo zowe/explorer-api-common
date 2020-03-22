@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2019, 2020
+ * Copyright IBM Corporation 2018, 2020
  */
 package org.zowe.api.common.utils;
 
@@ -19,8 +19,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
-import org.springframework.util.Base64Utils;
 import org.springframework.http.MediaType;
+import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
 
