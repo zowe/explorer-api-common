@@ -5,11 +5,10 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2019, 2020
+ * Copyright IBM Corporation 2019
  */
 package org.zowe.api.common.zosmf.services;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -19,9 +18,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
 import org.springframework.util.StringUtils;
-import org.zowe.api.common.connectors.zosmf.ZosmfConnectorV2;
+import org.zowe.api.common.connectors.zosmf.ZosmfConnectorV1;
 import org.zowe.api.common.exceptions.HtmlEscapedZoweApiRestException;
-import org.zowe.api.common.exceptions.InvalidAuthTokenException;
 import org.zowe.api.common.exceptions.NoZosmfResponseEntityException;
 import org.zowe.api.common.exceptions.ServerErrorException;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
@@ -33,9 +31,9 @@ import java.net.URISyntaxException;
 import java.util.stream.IntStream;
 
 @Slf4j
-public abstract class AbstractZosmfRequestRunner<T> {
+public abstract class AbstractZosmfRequestRunnerV1<T> {
 
-    public T run(ZosmfConnectorV2 zosmfConnector) {
+    public T run(ZosmfConnectorV1 zosmfConnector) {
         try {
             RequestBuilder requestBuilder = prepareQuery(zosmfConnector);
             URI uri = requestBuilder.getUri();
@@ -50,7 +48,7 @@ public abstract class AbstractZosmfRequestRunner<T> {
 
     protected abstract int[] getSuccessStatus();
 
-    protected abstract RequestBuilder prepareQuery(ZosmfConnectorV2 zosmfConnector)
+    protected abstract RequestBuilder prepareQuery(ZosmfConnectorV1 zosmfConnector)
             throws URISyntaxException, IOException;
 
     T processResponse(ResponseCache responseCache, URI uri) throws IOException {
@@ -71,17 +69,6 @@ public abstract class AbstractZosmfRequestRunner<T> {
         return null;
     }
 
-    protected Boolean wasRequestUnauthorised(org.springframework.http.HttpStatus springStatus, JsonObject jsonResponse) {
-        if (springStatus == org.springframework.http.HttpStatus.UNAUTHORIZED && jsonResponse.has("messages")) {
-            JsonArray messagesArray = jsonResponse.get("messages").getAsJsonArray();
-            if (messagesArray.get(0).getAsJsonObject().has("messageNumber") &&
-                messagesArray.get(0).getAsJsonObject().get("messageNumber").getAsString().equals("ZWEAG102E")) {
-                    return true;
-                }
-        }
-        return false;
-    }
-
     protected ZoweApiRestException createGeneralException(ResponseCache responseCache, URI uri) throws IOException {
         String entityString = responseCache.getEntity();
         org.springframework.http.HttpStatus springStatus = responseCache.getSpringHttpStatus();
@@ -91,9 +78,6 @@ public abstract class AbstractZosmfRequestRunner<T> {
             if (mimeType.equals(ContentType.APPLICATION_JSON.getMimeType())) {
                 JsonObject jsonResponse = responseCache.getEntityAsJsonObject();
 
-                if (Boolean.TRUE.equals(wasRequestUnauthorised(springStatus, jsonResponse))) {
-                    return new InvalidAuthTokenException();
-                }
                 ZoweApiRestException exception = createException(jsonResponse, responseCache.getStatus());
                 if (exception != null) {
                     return exception;

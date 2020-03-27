@@ -28,7 +28,7 @@ import org.zowe.api.common.connectors.zosmf.ZosmfConnectorV2;
 import org.zowe.api.common.test.ZoweApiTest;
 import org.zowe.api.common.utils.JsonUtils;
 import org.zowe.api.common.utils.ResponseCache;
-import org.zowe.api.common.zosmf.services.AbstractZosmfRequestRunner;
+import org.zowe.api.common.zosmf.services.AbstractZosmfRequestRunnerV2;
 
 import java.io.IOException;
 import java.net.URI;
@@ -43,7 +43,7 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ RequestBuilder.class, JsonUtils.class, ContentType.class, AbstractZosmfRequestRunner.class })
+@PrepareForTest({ RequestBuilder.class, JsonUtils.class, ContentType.class, AbstractZosmfRequestRunnerV2.class })
 public abstract class AbstractZosmfRequestRunnerTest extends ZoweApiTest {
 
     protected static final String BASE_URL = "https://dummy.com/zosmf/";
