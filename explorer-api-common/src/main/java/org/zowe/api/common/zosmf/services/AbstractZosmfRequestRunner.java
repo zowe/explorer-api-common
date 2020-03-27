@@ -19,7 +19,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
 import org.springframework.util.StringUtils;
-import org.zowe.api.common.connectors.zosmf.ZosmfConnector;
+import org.zowe.api.common.connectors.zosmf.ZosmfConnectorV2;
 import org.zowe.api.common.exceptions.HtmlEscapedZoweApiRestException;
 import org.zowe.api.common.exceptions.InvalidAuthTokenException;
 import org.zowe.api.common.exceptions.NoZosmfResponseEntityException;
@@ -35,7 +35,7 @@ import java.util.stream.IntStream;
 @Slf4j
 public abstract class AbstractZosmfRequestRunner<T> {
 
-    public T run(ZosmfConnector zosmfConnector) {
+    public T run(ZosmfConnectorV2 zosmfConnector) {
         try {
             RequestBuilder requestBuilder = prepareQuery(zosmfConnector);
             URI uri = requestBuilder.getUri();
@@ -50,7 +50,7 @@ public abstract class AbstractZosmfRequestRunner<T> {
 
     protected abstract int[] getSuccessStatus();
 
-    protected abstract RequestBuilder prepareQuery(ZosmfConnector zosmfConnector)
+    protected abstract RequestBuilder prepareQuery(ZosmfConnectorV2 zosmfConnector)
             throws URISyntaxException, IOException;
 
     T processResponse(ResponseCache responseCache, URI uri) throws IOException {

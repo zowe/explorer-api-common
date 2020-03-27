@@ -35,7 +35,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class ZosmfConnector {
+public class ZosmfConnectorV2 {
 
     private final String gatewayHost;
     private final int gatewayPort;
@@ -58,7 +58,7 @@ public class ZosmfConnector {
     }
 
     @Autowired
-    public ZosmfConnector(GatewayProperties properties) {
+    public ZosmfConnectorV2(GatewayProperties properties) {
         gatewayHost = properties.getIpAddress();
         gatewayPort = properties.getHttpsPort();
     }
