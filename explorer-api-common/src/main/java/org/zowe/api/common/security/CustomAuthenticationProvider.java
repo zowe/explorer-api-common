@@ -22,7 +22,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.zowe.api.common.connectors.zosmf.ZosmfConnectorV1;
+import org.zowe.api.common.connectors.zosmf.ZosmfConnector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ import java.util.List;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    ZosmfConnectorV1 zosmfconnector;
+    ZosmfConnector zosmfconnector;
 
     // TODO - review exception/responses/logging https://github.com/zowe/explorer-api-common/issues/9
 
