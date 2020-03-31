@@ -46,13 +46,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ZosmfConnector {
+public abstract class ZosmfConnector {
     
     @Autowired
-    private HttpServletRequest request;
+    protected HttpServletRequest request;
     
-    private final String host;
-    private final int port;
+    protected final String host;
+    protected final int port;
 
     @Autowired
     public ZosmfConnector(ConnectionProperties properties) {
@@ -74,7 +74,8 @@ public class ZosmfConnector {
     }
     
     public HttpResponse executeRequest(RequestBuilder requestBuilder) throws IOException {
-        requestBuilder.setHeader("X-CSRF-ZOSMF-HEADER", "");
+    	requestBuilder.setHeader(getAuthHeader());
+    	requestBuilder.setHeader("X-CSRF-ZOSMF-HEADER", "");
         requestBuilder.setHeader("X-IBM-Response-Timeout", "600");
         
         HttpClient client;
@@ -87,144 +88,10 @@ public class ZosmfConnector {
         return client.execute(requestBuilder.build());
     }
     
-    public Header getJWTAuthHeader() {
-        // If user is passing jwt as a cookie
-        String cookieHeader = request.getHeader("cookie");
-        if (cookieHeader != null && !cookieHeader.isEmpty()) {
-            String[] cookies = cookieHeader.split(";");
-            Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
-            if(authTokenCookie.isPresent()) {
-                return new BasicHeader("Authorization", "Bearer " + authTokenCookie.get().split("=")[1]);
-            }
-        } else {
-            // If user is passing jwt in Authorization header 
-            String header = request.getHeader("authorization");
-            if(header != null && !header.isEmpty()) {
-                return new BasicHeader("Authorization", "Bearer " + header);
-            }
-        }
-        throw new NoAuthTokenException();
-    }
+    protected abstract Header getAuthHeader();
     
-    public Header getLtpaAuthHeader() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUser customUser = (CustomUser) authentication.getPrincipal();
-        return new BasicHeader("Cookie", customUser.getLtpa());
-    }
-    
-    public Header getLtpaHeader(String username, String password)
-            throws IOException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
-        URI targetUrl = getFullUrl("restjobs/jobs");
-        CredentialsProvider credentialsProvider = getCredentialProvider(username, password);
-        HttpClient createIgnoreSSLClient = createPreemptiveHttpClientIgnoreSSL(credentialsProvider);
-
-        HttpGet httpGet = new HttpGet(targetUrl);
-        httpGet.setHeader("X-CSRF-ZOSMF-HEADER", "");
-        HttpResponse response = createIgnoreSSLClient.execute(httpGet, createPreemptiveHttpClientContext(credentialsProvider,targetUrl));
-        Header setCookieHeader = response.getFirstHeader("Set-Cookie");
-        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-            return setCookieHeader;
-        } else {
-            throw new IOException("login failed");
-        }
-    }
-    
-    private CredentialsProvider getCredentialProvider(String userName, String password) {
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
-        return credentialsProvider;
-    }
-
-    /**
-     * Make a Preemptive Basic Authentication Context
-     *
-     * @param credentialsProvider
-     * @param targetUrl
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws KeyManagementException
-     */
-    private HttpClientContext createPreemptiveHttpClientContext(CredentialsProvider credentialsProvider, URI targetUrl) {
-        HttpHost targetHost = new HttpHost(targetUrl.getHost(), targetUrl.getPort(), targetUrl.getScheme());
-        AuthCache authCache = new BasicAuthCache();
-        authCache.put(targetHost, new BasicScheme());
-        // Add AuthCache to the execution context
-        final HttpClientContext context = HttpClientContext.create();
-        context.setCredentialsProvider(credentialsProvider);
-        context.setAuthCache(authCache);
-        return context;
-    }
-
-    /**
-     * Make a Preemptive Basic Authentication HttpClient
-     * @param credentialsProvider is the credential Provider
-     * @return return the httpclient
-     * @throws NoSuchAlgorithmException the exception
-     * @throws KeyManagementException the exception too
-     */
-    public static HttpClient createPreemptiveHttpClientIgnoreSSL(CredentialsProvider credentialsProvider)
-            throws NoSuchAlgorithmException, KeyManagementException {
-        SSLContext sslcontext = SSLContext.getInstance("TLS");
-        sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
-            @Override
-            public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
-            }
-
-            @Override
-            public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
-            }
-
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[0];
-            }
-
-        } } , new java.security.SecureRandom());
-        return HttpClientBuilder.create().setSSLContext(sslcontext).setDefaultCredentialsProvider(credentialsProvider)
-                .setSSLHostnameVerifier(new HostnameVerifier() {
-
-                    @Override
-                    public boolean verify(String s1, SSLSession s2) {
-                        return true;
-                    }
-
-                }).build();
-    }
-
-
-    public static HttpClient createIgnoreSSLClientWithPassword(String userName, String password)
-            throws NoSuchAlgorithmException, KeyManagementException {
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
-
-        SSLContext sslcontext = SSLContext.getInstance("TLS");
-        sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
-            @Override
-            public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
-            }
-
-            @Override
-            public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
-            }
-
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[0];
-            }
-
-        } } , new java.security.SecureRandom());
-        return HttpClientBuilder.create().setSSLContext(sslcontext).setDefaultCredentialsProvider(credentialsProvider)
-                .setSSLHostnameVerifier(new HostnameVerifier() {
-
-                    @Override
-                    public boolean verify(String s1, SSLSession s2) {
-                        return true;
-                    }
-
-                }).build();
-    }
-
-    public static HttpClient createIgnoreSSLClient() throws KeyManagementException, NoSuchAlgorithmException {
+ 
+    protected static HttpClient createIgnoreSSLClient() throws KeyManagementException, NoSuchAlgorithmException {
         SSLContext sslcontext = SSLContext.getInstance("TLS");
         sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
             @Override

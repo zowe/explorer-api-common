@@ -9,7 +9,8 @@
  */
 package org.zowe.api.common.security;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.Header;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,17 +23,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.zowe.api.common.connectors.zosmf.ZosmfConnector;
+import org.zowe.api.common.connectors.zosmf.ZosmfConnectorV1;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    ZosmfConnector zosmfconnector;
+    ZosmfConnectorV1 zosmfconnector;
 
     // TODO - review exception/responses/logging https://github.com/zowe/explorer-api-common/issues/9
 
