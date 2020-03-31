@@ -1,15 +1,21 @@
-/*
- * This program and the accompanying materials are made available under the terms of the
- * Eclipse Public License v2.0 which accompanies this distribution, and is available at
- * https://www.eclipse.org/legal/epl-v20.html
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * Copyright IBM Corporation 2018, 2018
- */
 package org.zowe.api.common.connectors.zosmf;
 
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.GeneralSecurityException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.Optional;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
@@ -27,57 +33,50 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.zowe.api.common.connectors.zosmf.exceptions.ZosmfConnectionException;
+import org.zowe.api.common.exceptions.NoAuthTokenException;
 import org.zowe.api.common.security.CustomUser;
 
-import javax.net.ssl.*;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.security.GeneralSecurityException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ZosmfConnectorV1 {
+public class ZosmfConnector {
+    
+    @Autowired
+    private HttpServletRequest request;
+    
+    private final String host;
+    private final int port;
 
-    private final String zosmfHost;
-    private final int zosmfPort;
-
+    @Autowired
+    public ZosmfConnector(ConnectionProperties properties) {
+        host = properties.getIpAddress();
+        port = properties.getHttpsPort();
+    }
+    
     public URI getFullUrl(String relativePath) throws URISyntaxException {
         return getFullUrl(relativePath, null);
     }
-
+    
     public URI getFullUrl(String relativePath, String query) throws URISyntaxException {
         try {
-            return new URI("https", null, zosmfHost, zosmfPort, "/zosmf/" + relativePath, query, null);
+            return new URI("https", null, host, port, "/api/v1/zosmf/" + relativePath, query, null);
         } catch (URISyntaxException e) {
             log.error("getFullUrl", e);
             throw e;
         }
     }
-
-    @Autowired
-    public ZosmfConnectorV1(ZosmfProperties properties) {
-        zosmfHost = properties.getIpAddress();
-        zosmfPort = properties.getHttpsPort();
-    }
-
-    public HttpResponse request(RequestBuilder requestBuilder) throws IOException {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        CustomUser customUser = (CustomUser) authentication.getPrincipal();
-        requestBuilder.setHeader("Cookie", customUser.getLtpa());
+    
+    public HttpResponse executeRequest(RequestBuilder requestBuilder) throws IOException {
         requestBuilder.setHeader("X-CSRF-ZOSMF-HEADER", "");
         requestBuilder.setHeader("X-IBM-Response-Timeout", "600");
-
+        
         HttpClient client;
         try {
             client = createIgnoreSSLClient();
@@ -86,9 +85,33 @@ public class ZosmfConnectorV1 {
             throw new ZosmfConnectionException(e);
         }
         return client.execute(requestBuilder.build());
-
     }
-
+    
+    public Header getJWTAuthHeader() {
+        // If user is passing jwt as a cookie
+        String cookieHeader = request.getHeader("cookie");
+        if (cookieHeader != null && !cookieHeader.isEmpty()) {
+            String[] cookies = cookieHeader.split(";");
+            Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
+            if(authTokenCookie.isPresent()) {
+                return new BasicHeader("Authorization", "Bearer " + authTokenCookie.get().split("=")[1]);
+            }
+        } else {
+            // If user is passing jwt in Authorization header 
+            String header = request.getHeader("authorization");
+            if(header != null && !header.isEmpty()) {
+                return new BasicHeader("Authorization", "Bearer " + header);
+            }
+        }
+        throw new NoAuthTokenException();
+    }
+    
+    public Header getLtpaAuthHeader() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUser customUser = (CustomUser) authentication.getPrincipal();
+        return new BasicHeader("Cookie", customUser.getLtpa());
+    }
+    
     public Header getLtpaHeader(String username, String password)
             throws IOException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
         URI targetUrl = getFullUrl("restjobs/jobs");
@@ -105,7 +128,7 @@ public class ZosmfConnectorV1 {
             throw new IOException("login failed");
         }
     }
-
+    
     private CredentialsProvider getCredentialProvider(String userName, String password) {
         CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
@@ -227,4 +250,5 @@ public class ZosmfConnectorV1 {
 
         }).build();
     }
+    
 }
