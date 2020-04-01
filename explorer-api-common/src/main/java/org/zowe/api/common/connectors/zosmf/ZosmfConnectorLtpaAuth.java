@@ -5,6 +5,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
@@ -20,6 +27,7 @@ import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -82,5 +90,73 @@ public class ZosmfConnectorLtpaAuth extends ZosmfConnector {
         context.setCredentialsProvider(credentialsProvider);
         context.setAuthCache(authCache);
         return context;
-    }    
+    }
+    
+    /**
+     * Make a Preemptive Basic Authentication HttpClient
+     * @param credentialsProvider is the credential Provider
+     * @return return the httpclient
+     * @throws NoSuchAlgorithmException the exception
+     * @throws KeyManagementException the exception too
+     */
+    public static HttpClient createPreemptiveHttpClientIgnoreSSL(CredentialsProvider credentialsProvider)
+            throws NoSuchAlgorithmException, KeyManagementException {
+        SSLContext sslcontext = SSLContext.getInstance("TLS");
+        sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+
+        } } , new java.security.SecureRandom());
+        return HttpClientBuilder.create().setSSLContext(sslcontext).setDefaultCredentialsProvider(credentialsProvider)
+                .setSSLHostnameVerifier(new HostnameVerifier() {
+
+                    @Override
+                    public boolean verify(String s1, SSLSession s2) {
+                        return true;
+                    }
+
+                }).build();
+    }
+
+    public static HttpClient createIgnoreSSLClientWithPassword(String userName, String password)
+            throws NoSuchAlgorithmException, KeyManagementException {
+        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(userName, password));
+
+        SSLContext sslcontext = SSLContext.getInstance("TLS");
+        sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] arg0, String arg1) {
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+
+        } } , new java.security.SecureRandom());
+        return HttpClientBuilder.create().setSSLContext(sslcontext).setDefaultCredentialsProvider(credentialsProvider)
+                .setSSLHostnameVerifier(new HostnameVerifier() {
+
+                    @Override
+                    public boolean verify(String s1, SSLSession s2) {
+                        return true;
+                    }
+
+                }).build();
+    }
 }
