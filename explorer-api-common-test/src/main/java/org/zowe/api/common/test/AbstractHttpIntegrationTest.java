@@ -21,14 +21,13 @@ import org.zowe.api.common.errors.ApiError;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractHttpIntegrationTest {
 
     private final static String SERVER_HOST = System.getProperty("server.host");
     private final static String SERVER_PORT = System.getProperty("server.port");
 
-    protected final static String BASE_URL = "https://" + SERVER_HOST + ":" + SERVER_PORT + "/api/v1/";
+    protected final static String BASE_URL = "https://" + SERVER_HOST + ":" + SERVER_PORT + "/api/v2/";
 
     protected final static String USER = System.getProperty("server.username");
     private final static String PASSWORD = System.getProperty("server.password");
@@ -38,7 +37,7 @@ public abstract class AbstractHttpIntegrationTest {
         RestAssured.useRelaxedHTTPSValidation();
         Response response = RestAssured.given().contentType("application/json")
                 .body("{\"username\":\"" + USER + "\",\"password\":\"" + PASSWORD + "\"}")
-                .when().post(BASE_URL + "gateway/auth/login");
+                .when().post("https://" + SERVER_HOST + ":" + SERVER_PORT + "/api/v1/gateway/auth/login");
         assertEquals(response.getStatusCode(), HttpStatus.SC_NO_CONTENT);
         return response.getCookie("apimlAuthenticationToken");
     }

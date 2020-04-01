@@ -80,6 +80,7 @@ public abstract class AbstractZosmfRequestRunnerTest extends ZoweApiTest {
     protected void verifyInteractions(RequestBuilder requestBuilder, boolean path)
             throws IOException, URISyntaxException {
         requestBuilder.setHeader(zosmfConnector.getAuthHeader());
+        verify(zosmfConnector, times(1)).getAuthHeader();
         verify(zosmfConnector, times(1)).executeRequest(requestBuilder);
         if (path) {
             verify(zosmfConnector, times(1)).getFullUrl(anyString(), anyString());
