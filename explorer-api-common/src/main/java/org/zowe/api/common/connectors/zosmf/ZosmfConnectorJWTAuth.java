@@ -35,7 +35,7 @@ public class ZosmfConnectorJWTAuth extends ZosmfConnector {
             // If user is passing jwt in Authorization header 
             String header = request.getHeader("authorization");
             if(header != null && !header.isEmpty()) {
-                return new BasicHeader("Authorization", "Bearer " + header);
+                return new BasicHeader("Authorization", header);
             }
         }
         throw new NoAuthTokenException();
