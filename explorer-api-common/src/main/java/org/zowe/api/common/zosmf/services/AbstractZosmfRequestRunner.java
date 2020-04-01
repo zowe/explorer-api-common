@@ -34,34 +34,19 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class AbstractZosmfRequestRunner<T> {
-
-    public T runWithLtpa(ZosmfConnector zosmfConnector) {
+    
+    public T run(ZosmfConnector zosmfConnector) {
         try {
             RequestBuilder requestBuilder = prepareQuery(zosmfConnector);
-            requestBuilder.setHeader(zosmfConnector.getLtpaAuthHeader());
-            return run(zosmfConnector, requestBuilder);
+            URI uri = requestBuilder.getUri();
+            HttpResponse response = zosmfConnector.executeRequest(requestBuilder);
+            ResponseCache responseCache = new ResponseCache(response);
+            return processResponse(responseCache, uri);
         } catch (IOException | URISyntaxException e) {
             log.error("run", e);
             throw new ServerErrorException(e);
         }
-    }
-    
-    public T runWithJWT(ZosmfConnector zosmfConnector) {
-        try {
-            RequestBuilder requestBuilder = prepareQuery(zosmfConnector);
-            requestBuilder.setHeader(zosmfConnector.getJWTAuthHeader());
-            return run(zosmfConnector, requestBuilder);
-        } catch (IOException | URISyntaxException e) {
-            log.error("run", e);
-            throw new ServerErrorException(e);
-        }
-    }
-    
-    private T run(ZosmfConnector zosmfConnector, RequestBuilder requestBuilder) throws IOException {
-        URI uri = requestBuilder.getUri();
-        HttpResponse response = zosmfConnector.executeRequest(requestBuilder);
-        ResponseCache responseCache = new ResponseCache(response);
-        return processResponse(responseCache, uri);
+        
     }
     
     protected abstract int[] getSuccessStatus();

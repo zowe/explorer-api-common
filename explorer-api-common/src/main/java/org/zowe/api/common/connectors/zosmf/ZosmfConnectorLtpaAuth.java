@@ -24,8 +24,10 @@ import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import org.zowe.api.common.security.CustomUser;
 
+@Service
 public class ZosmfConnectorLtpaAuth extends ZosmfConnector {
     
     @Autowired

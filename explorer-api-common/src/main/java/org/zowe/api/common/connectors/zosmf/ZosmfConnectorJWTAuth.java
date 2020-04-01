@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.zowe.api.common.exceptions.NoAuthTokenException;
 
+@Service
 public class ZosmfConnectorJWTAuth extends ZosmfConnector {
     
     @Autowired

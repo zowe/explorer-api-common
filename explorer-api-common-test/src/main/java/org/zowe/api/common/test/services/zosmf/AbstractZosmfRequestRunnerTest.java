@@ -24,7 +24,7 @@ import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.zowe.api.common.connectors.zosmf.ZosmfConnector;
+import org.zowe.api.common.connectors.zosmf.ZosmfConnectorJWTAuth;
 import org.zowe.api.common.test.ZoweApiTest;
 import org.zowe.api.common.utils.JsonUtils;
 import org.zowe.api.common.utils.ResponseCache;
@@ -49,7 +49,7 @@ public abstract class AbstractZosmfRequestRunnerTest extends ZoweApiTest {
     protected static final String BASE_URL = "https://dummy.com/zosmf/";
 
     @Mock
-    protected ZosmfConnector zosmfConnector;
+    protected ZosmfConnectorJWTAuth zosmfConnector;
 
     @Mock
     protected HttpResponse response;
@@ -79,7 +79,7 @@ public abstract class AbstractZosmfRequestRunnerTest extends ZoweApiTest {
 
     protected void verifyInteractions(RequestBuilder requestBuilder, boolean path)
             throws IOException, URISyntaxException {
-        requestBuilder.setHeader(zosmfConnector.getJWTAuthHeader());
+        requestBuilder.setHeader(zosmfConnector.getAuthHeader());
         verify(zosmfConnector, times(1)).executeRequest(requestBuilder);
         if (path) {
             verify(zosmfConnector, times(1)).getFullUrl(anyString(), anyString());
