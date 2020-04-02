@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2020
+ * Copyright IBM Corporation 2018
  */
 package org.zowe.api.common.security;
 
