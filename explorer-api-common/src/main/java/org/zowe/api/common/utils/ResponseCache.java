@@ -77,7 +77,10 @@ public class ResponseCache {
     }
 
     private boolean isOctetStream() {
-        return this.getContentType().getMimeType().equals(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        if (this.getContentType() != null) {
+            return this.getContentType().getMimeType().equals(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        }
+        return false;
     }
 
     // TODO - do we need to cache this?

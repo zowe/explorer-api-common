@@ -9,20 +9,6 @@
  */
 package org.zowe.api.common.connectors.zosmf;
 
-import lombok.extern.slf4j.Slf4j;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.zowe.api.common.connectors.zosmf.exceptions.ZosmfConnectionException;
-import org.zowe.api.common.exceptions.NoAuthTokenException;
-
-import javax.net.ssl.*;
-import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -30,63 +16,53 @@ import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
-import java.util.Optional;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.zowe.api.common.connectors.zosmf.exceptions.ZosmfConnectionException;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
-public class ZosmfConnector {
+public abstract class ZosmfConnector {
+    
+    private final String host;
+    private final int port;
 
-    private final String gatewayHost;
-    private final int gatewayPort;
-
-    @Autowired
-    private HttpServletRequest request;
-
-
+    public ZosmfConnector(ConnectionProperties properties) {
+        host = properties.getIpAddress();
+        port = properties.getHttpsPort();
+    }
+    
     public URI getFullUrl(String relativePath) throws URISyntaxException {
         return getFullUrl(relativePath, null);
     }
-
+    
     public URI getFullUrl(String relativePath, String query) throws URISyntaxException {
         try {
-            return new URI("https", null, gatewayHost, gatewayPort, "/api/v1/zosmf/" + relativePath, query, null);
+            return new URI("https", null, host, port, "/api/v1/zosmf/" + relativePath, query, null);
         } catch (URISyntaxException e) {
             log.error("getFullUrl", e);
             throw e;
         }
     }
-
-    @Autowired
-    public ZosmfConnector(GatewayProperties properties) {
-        gatewayHost = properties.getIpAddress();
-        gatewayPort = properties.getHttpsPort();
-    }
-
-    private String getAuthorizationValueFromHeaders() {
-        // If user is passing jwt as a cookie
-        String cookieHeader = request.getHeader("cookie");
-        if (cookieHeader != null && !cookieHeader.isEmpty()) {
-            String[] cookies = cookieHeader.split(";");
-            Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
-            if(authTokenCookie.isPresent()) {
-                return "Bearer " + authTokenCookie.get().split("=")[1];
-            }
-        } else {
-            // If user is passing jwt in Authorization header 
-            String header = request.getHeader("authorization");
-            if(header != null && !header.isEmpty()) {
-               return header;
-            }
-        }
-        throw new NoAuthTokenException();
-    }
-
-    public HttpResponse request(RequestBuilder requestBuilder) throws IOException {
-        requestBuilder.setHeader("Authorization", getAuthorizationValueFromHeaders());
+    
+    public abstract Header getAuthHeader();
+    
+    public HttpResponse executeRequest(RequestBuilder requestBuilder) throws IOException {
+        requestBuilder.setHeader(getAuthHeader());
         requestBuilder.setHeader("X-CSRF-ZOSMF-HEADER", "");
         requestBuilder.setHeader("X-IBM-Response-Timeout", "600");
-
+        
         HttpClient client;
         try {
             client = createIgnoreSSLClient();
@@ -95,7 +71,6 @@ public class ZosmfConnector {
             throw new ZosmfConnectionException(e);
         }
         return client.execute(requestBuilder.build());
-
     }
 
     public static HttpClient createIgnoreSSLClient() throws KeyManagementException, NoSuchAlgorithmException {
@@ -124,4 +99,5 @@ public class ZosmfConnector {
 
         }).build();
     }
+    
 }

@@ -9,11 +9,10 @@
  */
 package org.zowe.api.common.zosmf.services;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.stream.IntStream;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
@@ -27,33 +26,35 @@ import org.zowe.api.common.exceptions.ServerErrorException;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
 import org.zowe.api.common.utils.ResponseCache;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.stream.IntStream;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class AbstractZosmfRequestRunner<T> {
-
+    
     public T run(ZosmfConnector zosmfConnector) {
         try {
             RequestBuilder requestBuilder = prepareQuery(zosmfConnector);
             URI uri = requestBuilder.getUri();
-            HttpResponse response = zosmfConnector.request(requestBuilder);
+            HttpResponse response = zosmfConnector.executeRequest(requestBuilder);
             ResponseCache responseCache = new ResponseCache(response);
             return processResponse(responseCache, uri);
         } catch (IOException | URISyntaxException e) {
             log.error("run", e);
             throw new ServerErrorException(e);
         }
+        
     }
-
+    
     protected abstract int[] getSuccessStatus();
 
     protected abstract RequestBuilder prepareQuery(ZosmfConnector zosmfConnector)
             throws URISyntaxException, IOException;
-
-    T processResponse(ResponseCache responseCache, URI uri) throws IOException {
+    
+    protected T processResponse(ResponseCache responseCache, URI uri) throws IOException {
         int statusCode = responseCache.getStatus();
         boolean success = IntStream.of(getSuccessStatus()).anyMatch(x -> x == statusCode);
         if (success) {
@@ -64,13 +65,13 @@ public abstract class AbstractZosmfRequestRunner<T> {
             throw createGeneralException(responseCache, uri);
         }
     }
-
+    
     protected abstract T getResult(ResponseCache responseCache) throws IOException;
 
     protected ZoweApiRestException createException(JsonObject jsonResponse, int statusCode) throws IOException {
         return null;
     }
-
+    
     protected Boolean wasRequestUnauthorised(org.springframework.http.HttpStatus springStatus, JsonObject jsonResponse) {
         if (springStatus == org.springframework.http.HttpStatus.UNAUTHORIZED && jsonResponse.has("messages")) {
             JsonArray messagesArray = jsonResponse.get("messages").getAsJsonArray();
@@ -110,7 +111,7 @@ public abstract class AbstractZosmfRequestRunner<T> {
             return new NoZosmfResponseEntityException(springStatus, uri.toString());
         }
     }
-
+    
     protected String getStringOrNull(JsonObject json, String key) {
         String value = null;
         JsonElement jsonElement = json.get(key);
