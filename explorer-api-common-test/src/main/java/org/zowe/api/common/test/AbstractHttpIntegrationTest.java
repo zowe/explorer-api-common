@@ -11,10 +11,14 @@ package org.zowe.api.common.test;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.http.Header;
 import io.restassured.response.Response;
 
 import static org.junit.Assert.assertEquals;
 
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpStatus;
 import org.junit.BeforeClass;
 import org.zowe.api.common.errors.ApiError;
@@ -28,19 +32,40 @@ public abstract class AbstractHttpIntegrationTest {
     private final static String SERVER_HOST = System.getProperty("server.host");
     private final static String SERVER_PORT = System.getProperty("server.port");
 
-    protected final static String BASE_URL = "https://" + SERVER_HOST + ":" + SERVER_PORT + "/api/v1/";
+    protected final static String BASE_URL = getBaseUrl();
 
     protected final static String USER = System.getProperty("server.username");
     private final static String PASSWORD = System.getProperty("server.password");
-    protected final static String AUTH_TOKEN = getGatewayAuthToken();
+    protected final static Header AUTH_HEADER = getAuthHeader();
     
-    private static String getGatewayAuthToken() {        
+    private static String getBaseUrl() {
+        String baseUrl = "https://" + SERVER_HOST + ":" + SERVER_PORT;
+        if (System.getProperty("test.version") != null && System.getProperty("test.version").equals("1")) {
+            return baseUrl + "/api/v1/";
+        }
+        return baseUrl + "/api/v2/";
+    }
+    
+    private static Header getAuthHeader() {        
         RestAssured.useRelaxedHTTPSValidation();
+        if (System.getProperty("test.version") != null && System.getProperty("test.version").equals("1")) {
+            return getBasicAuthHeader();
+        }
+        return getJWTAuthHeader();
+    }
+    
+    private static Header getJWTAuthHeader() {
         Response response = RestAssured.given().contentType("application/json")
                 .body("{\"username\":\"" + USER + "\",\"password\":\"" + PASSWORD + "\"}")
-                .when().post(BASE_URL + "gateway/auth/login");
+                .when().post("https://" + SERVER_HOST + ":" + SERVER_PORT + "/api/v1/gateway/auth/login");
         assertEquals(response.getStatusCode(), HttpStatus.SC_NO_CONTENT);
-        return response.getCookie("apimlAuthenticationToken");
+        return new Header("Authorization", "Bearer " + response.getCookie("apimlAuthenticationToken"));
+    }
+    
+    private static Header getBasicAuthHeader() {
+        String credentials = System.getProperty("server.username") + ":" + System.getProperty("server.password"); 
+        byte[] encodedAuth = Base64.encodeBase64(credentials.getBytes(StandardCharsets.ISO_8859_1));
+        return new Header("Authorization", "Basic " + new String(encodedAuth));
     }
     
     @BeforeClass
