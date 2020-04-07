@@ -35,8 +35,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         // TODO - re-enable csrf?
         http.csrf().disable().authorizeRequests()
             .antMatchers(AUTH_WHITELIST).permitAll()
-            .antMatchers("/api/v2/*").permitAll()
-            .antMatchers("/api/v1/*").authenticated().and().httpBasic().authenticationEntryPoint(authEntryPoint);
+            .antMatchers("/api/v2/**").permitAll()
+            .antMatchers("/api/v1/**").authenticated().and().httpBasic().authenticationEntryPoint(authEntryPoint);
     }
     
     @Autowired
