@@ -30,6 +30,8 @@ public abstract class AbstractHttpIntegrationTest {
     private final static String SERVER_HOST = System.getProperty("server.host");
     private final static String SERVER_PORT = System.getProperty("server.port");
 
+    // these are optional, if not provided, we use server host and port params
+    // it helps use separate gateway host & port for authentication during testing
     private final static String GATEWAY_HOST = System.getProperty("gateway.host");
     private final static String GATEWAY_PORT = System.getProperty("gateway.port");
 
@@ -63,6 +65,7 @@ public abstract class AbstractHttpIntegrationTest {
         return new Header("Authorization", "Bearer " + response.getCookie("apimlAuthenticationToken"));
     }
 
+    // use provided gateway host and port first when provided 
     private static String getGatewayHost() {
         if (GATEWAY_HOST != null) {
             return GATEWAY_HOST;
