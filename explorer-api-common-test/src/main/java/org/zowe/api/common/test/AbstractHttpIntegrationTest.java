@@ -14,15 +14,13 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 
-import static org.junit.Assert.assertEquals;
-
-import java.nio.charset.StandardCharsets;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpStatus;
 import org.junit.BeforeClass;
 import org.zowe.api.common.errors.ApiError;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
+
+import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
@@ -31,6 +29,11 @@ public abstract class AbstractHttpIntegrationTest {
 
     private final static String SERVER_HOST = System.getProperty("server.host");
     private final static String SERVER_PORT = System.getProperty("server.port");
+
+    // these are optional, if not provided, we use server host and port params
+    // it helps use separate gateway host & port for authentication during testing
+    private final static String GATEWAY_HOST = System.getProperty("gateway.host");
+    private final static String GATEWAY_PORT = System.getProperty("gateway.port");
 
     protected final static String BASE_URL = getBaseUrl();
 
@@ -57,9 +60,24 @@ public abstract class AbstractHttpIntegrationTest {
     private static Header getJWTAuthHeader() {
         Response response = RestAssured.given().contentType("application/json")
                 .body("{\"username\":\"" + USER + "\",\"password\":\"" + PASSWORD + "\"}")
-                .when().post("https://" + SERVER_HOST + ":" + SERVER_PORT + "/api/v1/gateway/auth/login");
+                .when().post("https://" + getGatewayHost() + ":" + getGatewayPort() + "/api/v1/gateway/auth/login");
         assertEquals(response.getStatusCode(), HttpStatus.SC_NO_CONTENT);
         return new Header("Authorization", "Bearer " + response.getCookie("apimlAuthenticationToken"));
+    }
+
+    // use provided gateway host and port first when provided 
+    private static String getGatewayHost() {
+        if (GATEWAY_HOST != null) {
+            return GATEWAY_HOST;
+        }
+        return SERVER_HOST;
+    }
+
+    private static String getGatewayPort() {
+        if (GATEWAY_PORT != null) {
+            return GATEWAY_PORT;
+        }
+        return SERVER_PORT;
     }
     
     private static Header getBasicAuthHeader() {
