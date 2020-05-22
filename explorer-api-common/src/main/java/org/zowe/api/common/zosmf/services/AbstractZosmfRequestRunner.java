@@ -9,10 +9,11 @@
  */
 package org.zowe.api.common.zosmf.services;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.stream.IntStream;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
@@ -26,11 +27,10 @@ import org.zowe.api.common.exceptions.ServerErrorException;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
 import org.zowe.api.common.utils.ResponseCache;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.stream.IntStream;
 
 @Slf4j
 public abstract class AbstractZosmfRequestRunner<T> {
@@ -60,8 +60,7 @@ public abstract class AbstractZosmfRequestRunner<T> {
         if (success) {
             return getResult(responseCache);
         } else {
-            log.error("processResponse", "received response code", statusCode, "received response message",
-                    responseCache.getEntity());
+            log.error(String.format("processResponse - received response code : %s  - received response message: %s ", statusCode, responseCache.getEntity()));
             throw createGeneralException(responseCache, uri);
         }
     }
