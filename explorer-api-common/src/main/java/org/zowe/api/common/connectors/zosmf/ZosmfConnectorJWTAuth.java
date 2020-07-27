@@ -22,10 +22,10 @@ import java.util.Optional;
 
 @Service
 public class ZosmfConnectorJWTAuth extends ZosmfConnector {
-    
+
     @Autowired
     private HttpServletRequest request;
-    
+
     @Autowired
     public ZosmfConnectorJWTAuth(ConnectionProperties properties) {
         super(properties);
@@ -36,12 +36,13 @@ public class ZosmfConnectorJWTAuth extends ZosmfConnector {
         String cookieHeader = request.getHeader("cookie");
         if (cookieHeader != null && !cookieHeader.isEmpty()) {
             String[] cookies = cookieHeader.split(";");
-            Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
+            Optional<String> authTokenCookie = Arrays.stream(cookies)
+                    .filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
             if (authTokenCookie.isPresent()) {
                 return new BasicHeader("Authorization", "Bearer " + authTokenCookie.get().split("=")[1]);
             }
         } else {
-            // If user is passing jwt in Authorization header 
+            // If user is passing jwt in Authorization header
             String header = request.getHeader("authorization");
             if (header != null && !header.isEmpty()) {
                 return new BasicHeader("Authorization", header);

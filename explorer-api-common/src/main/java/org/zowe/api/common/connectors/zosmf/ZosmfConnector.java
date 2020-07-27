@@ -34,7 +34,6 @@ import java.security.cert.X509Certificate;
 
 @Slf4j
 public abstract class ZosmfConnector {
-    
     private final String host;
     private final int port;
 
@@ -42,11 +41,9 @@ public abstract class ZosmfConnector {
         host = properties.getIpAddress();
         port = properties.getHttpsPort();
     }
-    
     public URI getFullUrl(String relativePath) throws URISyntaxException {
         return getFullUrl(relativePath, null);
     }
-    
     public URI getFullUrl(String relativePath, String query) throws URISyntaxException {
         try {
             return new URI("https", null, host, port, "/api/v1/zosmf/" + relativePath, query, null);
@@ -55,14 +52,14 @@ public abstract class ZosmfConnector {
             throw e;
         }
     }
-    
+
     public abstract Header getAuthHeader();
     
     public HttpResponse executeRequest(RequestBuilder requestBuilder) throws IOException {
         requestBuilder.setHeader(getAuthHeader());
         requestBuilder.setHeader("X-CSRF-ZOSMF-HEADER", "");
         requestBuilder.setHeader("X-IBM-Response-Timeout", "600");
-        
+
         HttpClient client;
         try {
             client = createIgnoreSSLClient();
@@ -75,7 +72,7 @@ public abstract class ZosmfConnector {
 
     public static HttpClient createIgnoreSSLClient() throws KeyManagementException, NoSuchAlgorithmException {
         SSLContext sslcontext = SSLContext.getInstance("TLS");
-        sslcontext.init(null, new TrustManager[]{new X509TrustManager() {
+        sslcontext.init(null, new TrustManager[] { new X509TrustManager() {
             @Override
             public void checkClientTrusted(X509Certificate[] arg0, String arg1) {
             }
@@ -99,5 +96,5 @@ public abstract class ZosmfConnector {
 
         }).build();
     }
-    
+
 }

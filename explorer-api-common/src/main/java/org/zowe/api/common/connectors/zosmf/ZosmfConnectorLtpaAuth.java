@@ -9,6 +9,11 @@
  */
 package org.zowe.api.common.connectors.zosmf;
 
+<<<<<<< HEAD
+=======
+import lombok.extern.slf4j.Slf4j;
+
+>>>>>>> staging
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -44,6 +49,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
+@Slf4j
 @Service
 public class ZosmfConnectorLtpaAuth extends ZosmfConnector {
     
@@ -60,7 +66,7 @@ public class ZosmfConnectorLtpaAuth extends ZosmfConnector {
     
     public Header getLtpaHeader(String username, String password)
             throws IOException, KeyManagementException, NoSuchAlgorithmException, URISyntaxException {
-        URI targetUrl = getFullUrl("restjobs/jobs");
+        URI targetUrl = getFullUrl("info");
         CredentialsProvider credentialsProvider = getCredentialProvider(username, password);
         HttpClient createIgnoreSSLClient = createPreemptiveHttpClientIgnoreSSL(credentialsProvider);
 
@@ -71,6 +77,7 @@ public class ZosmfConnectorLtpaAuth extends ZosmfConnector {
         if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
             return setCookieHeader;
         } else {
+            log.error("getLtpaHeader - Received response code {} from {}", response.getStatusLine().getStatusCode(), targetUrl);
             throw new IOException("login failed");
         }
     }

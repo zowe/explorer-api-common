@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -36,7 +37,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
             .antMatchers(AUTH_WHITELIST).permitAll()
             .antMatchers("/api/v2/**").permitAll()
-            .antMatchers("/api/v1/**").authenticated().and().httpBasic().authenticationEntryPoint(authEntryPoint);
+            .antMatchers("/api/v1/**").authenticated().and().httpBasic().authenticationEntryPoint(authEntryPoint)
+            .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/**/logout"));
     }
     
     @Autowired
