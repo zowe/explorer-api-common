@@ -9,11 +9,8 @@
  */
 package org.zowe.api.common.connectors.zosmf;
 
-<<<<<<< HEAD
-=======
 import lombok.extern.slf4j.Slf4j;
 
->>>>>>> staging
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
