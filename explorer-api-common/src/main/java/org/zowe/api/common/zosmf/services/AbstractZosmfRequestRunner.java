@@ -9,11 +9,13 @@
  */
 package org.zowe.api.common.zosmf.services;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.stream.IntStream;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
@@ -26,27 +28,44 @@ import org.zowe.api.common.exceptions.ServerErrorException;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
 import org.zowe.api.common.utils.ResponseCache;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 @Slf4j
 public abstract class AbstractZosmfRequestRunner<T> {
     
+    private ArrayList<Header> requestHeaders;
+    
+    public AbstractZosmfRequestRunner(ArrayList<Header> headers) {
+        this.requestHeaders = headers;
+    }
+    
     public T run(ZosmfConnector zosmfConnector) {
         try {
             RequestBuilder requestBuilder = prepareQuery(zosmfConnector);
+            if (!requestHeaders.isEmpty()) {
+                requestBuilder = addHeadersToRequest(requestBuilder);
+            }
             URI uri = requestBuilder.getUri();
+            
             HttpResponse response = zosmfConnector.executeRequest(requestBuilder);
             ResponseCache responseCache = new ResponseCache(response);
             return processResponse(responseCache, uri);
         } catch (IOException | URISyntaxException e) {
             log.error("run", e);
             throw new ServerErrorException(e);
-        }
+        }   
+    }
+    
+    protected RequestBuilder addHeadersToRequest(RequestBuilder requestBuilder) {
         
+        for (Header header : this.requestHeaders) {
+            requestBuilder.addHeader(header);
+        }
+        return requestBuilder;
     }
     
     protected abstract int[] getSuccessStatus();

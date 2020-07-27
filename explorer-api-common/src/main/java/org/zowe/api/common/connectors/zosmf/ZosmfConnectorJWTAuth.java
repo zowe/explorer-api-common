@@ -9,16 +9,16 @@
  */
 package org.zowe.api.common.connectors.zosmf;
 
-import java.util.Arrays;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zowe.api.common.exceptions.NoAuthTokenException;
+
+import javax.servlet.http.HttpServletRequest;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 @Service
 public class ZosmfConnectorJWTAuth extends ZosmfConnector {
@@ -37,13 +37,13 @@ public class ZosmfConnectorJWTAuth extends ZosmfConnector {
         if (cookieHeader != null && !cookieHeader.isEmpty()) {
             String[] cookies = cookieHeader.split(";");
             Optional<String> authTokenCookie = Arrays.stream(cookies).filter(c -> c.contains("apimlAuthenticationToken")).findFirst();
-            if(authTokenCookie.isPresent()) {
+            if (authTokenCookie.isPresent()) {
                 return new BasicHeader("Authorization", "Bearer " + authTokenCookie.get().split("=")[1]);
             }
         } else {
             // If user is passing jwt in Authorization header 
             String header = request.getHeader("authorization");
-            if(header != null && !header.isEmpty()) {
+            if (header != null && !header.isEmpty()) {
                 return new BasicHeader("Authorization", header);
             }
         }
