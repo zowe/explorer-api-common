@@ -44,6 +44,10 @@ public abstract class AbstractZosmfRequestRunner<T> {
         this.requestHeaders = (ArrayList<Header>) headers;
     }
     
+    public AbstractZosmfRequestRunner() {
+        this.requestHeaders = new ArrayList<Header>();
+    }
+    
     public T run(ZosmfConnector zosmfConnector) {
         try {
             RequestBuilder requestBuilder = prepareQuery(zosmfConnector);
@@ -62,7 +66,6 @@ public abstract class AbstractZosmfRequestRunner<T> {
     }
     
     protected RequestBuilder addHeadersToRequest(RequestBuilder requestBuilder) {
-        
         for (Header header : this.requestHeaders) {
             requestBuilder.addHeader(header);
         }
