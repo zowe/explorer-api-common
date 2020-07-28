@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.IntStream;
 
 @Slf4j
@@ -39,8 +40,8 @@ public abstract class AbstractZosmfRequestRunner<T> {
     
     private ArrayList<Header> requestHeaders;
     
-    public AbstractZosmfRequestRunner(ArrayList<Header> headers) {
-        this.requestHeaders = headers;
+    public AbstractZosmfRequestRunner(List<Header> headers) {
+        this.requestHeaders = (ArrayList<Header>) headers;
     }
     
     public T run(ZosmfConnector zosmfConnector) {
