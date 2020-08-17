@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.ContentType;
@@ -30,23 +31,46 @@ import org.zowe.api.common.utils.ResponseCache;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.IntStream;
 
 @Slf4j
 public abstract class AbstractZosmfRequestRunner<T> {
     
+    private final ArrayList<Header> requestHeaders;
+    
+    public AbstractZosmfRequestRunner(List<Header> headers) {
+        this.requestHeaders = (ArrayList<Header>) headers;
+    }
+    
+    public AbstractZosmfRequestRunner() {
+        this(Collections.emptyList());
+    }
+    
     public T run(ZosmfConnector zosmfConnector) {
         try {
             RequestBuilder requestBuilder = prepareQuery(zosmfConnector);
+            if (!requestHeaders.isEmpty()) {
+                requestBuilder = addHeadersToRequest(requestBuilder);
+            }
             URI uri = requestBuilder.getUri();
+            
             HttpResponse response = zosmfConnector.executeRequest(requestBuilder);
             ResponseCache responseCache = new ResponseCache(response);
             return processResponse(responseCache, uri);
         } catch (IOException | URISyntaxException e) {
             log.error("run", e);
             throw new ServerErrorException(e);
+        }   
+    }
+    
+    protected RequestBuilder addHeadersToRequest(RequestBuilder requestBuilder) {
+        for (Header header : this.requestHeaders) {
+            requestBuilder.addHeader(header);
         }
-        
+        return requestBuilder;
     }
     
     protected abstract int[] getSuccessStatus();
