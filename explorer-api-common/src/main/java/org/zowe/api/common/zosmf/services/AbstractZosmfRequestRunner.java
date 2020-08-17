@@ -32,20 +32,21 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
 @Slf4j
 public abstract class AbstractZosmfRequestRunner<T> {
     
-    private ArrayList<Header> requestHeaders;
+    private final ArrayList<Header> requestHeaders;
     
     public AbstractZosmfRequestRunner(List<Header> headers) {
         this.requestHeaders = (ArrayList<Header>) headers;
     }
     
     public AbstractZosmfRequestRunner() {
-        this.requestHeaders = new ArrayList<Header>();
+        this(Collections.emptyList());
     }
     
     public T run(ZosmfConnector zosmfConnector) {
