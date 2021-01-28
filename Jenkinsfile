@@ -16,7 +16,7 @@ node('zowe-jenkins-agent') {
 
   def pipeline = lib.pipelines.gradle.GradlePipeline.new(this)
 
-  pipeline.admins.add("jackjia", "jcain", "stevenh")
+  pipeline.admins.add("jackjia", "jcain")
 
   pipeline.setup(
     github: [
