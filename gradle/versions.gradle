@@ -1,18 +1,18 @@
 ext {
 
     springBootVersion = '2.1.6.RELEASE'
-    springFoxVersion = '2.8.0'
+    springFoxVersion = '3.0.0'
     lombokVersion = '1.16.20'
     mockitoCoreVersion = '2.9.0'
     powerMockVersion = "1.7.3"
     gsonVersion = '2.8.2'
-    httpClientVersion = '4.5.3'
+    httpClientVersion = '4.5.13'
     httpCoreVersion = '4.4.10'
     commonsCodecVersion = '1.11'
     slf4jVersion = "1.7.25"
     jsonPathVersion = "2.4.0"
-    junitVersion = "4.12"
-    restAssuredVersion = "3.2.0"
+    junitVersion = "4.13.1"
+    restAssuredVersion = "4.3.0"
     hamcrestJunitVersion = "2.0.0.0"
     
 
