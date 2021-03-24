@@ -1,6 +1,6 @@
 ext {
 
-    springBootVersion = '2.1.6.RELEASE'
+    springBootVersion = '2.3.7.RELEASE'
     springFoxVersion = '3.0.0'
     lombokVersion = '1.16.20'
     mockitoCoreVersion = '2.9.0'
