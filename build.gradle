@@ -30,14 +30,12 @@ buildscript {
 
     dependencies {
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7'
-        classpath 'com.palantir:jacoco-coverage:0.4.0'
         classpath 'net.researchgate:gradle-release:2.6.0'
         classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${licenseGradlePluginVerion}"
         classpath 'org.owasp:dependency-check-gradle:3.3.4'
     }
 }
 
-apply plugin: 'com.palantir.jacoco-full-report'
 apply from: 'gradle/publish.gradle'
 apply from: 'gradle/sonar.gradle'
 apply from: 'gradle/coverage.gradle'
@@ -104,15 +102,6 @@ jacocoTestReport {
         xml.enabled true
         html.enabled true
     }
-}
-
-task mergeCoverage() {
-    dependsOn test, jacocoFullReport
-}
-
-task coverage() {
-    mergeCoverage.mustRunAfter jacocoSubProjects
-    dependsOn mergeCoverage, jacocoSubProjects, jacocoTestReport
 }
 
 task publishAllVersions {
