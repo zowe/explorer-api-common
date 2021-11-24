@@ -66,6 +66,10 @@ allprojects {
             downloadSources = true
         }
     }
+
+    configurations.all {
+        exclude group: 'org.glassfish', module: 'jakarta.el'
+    }
 }
 
 subprojects {
