@@ -36,9 +36,11 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - uses: ./.github/actions/setup
+      - name: Set up JDK ${{ inputs.jdkVersion }}
+        uses: actions/setup-java@v2
         with:
-          jdkVersion: 11
+          distribution: 'zulu'
+          java-version: 11
 
       - name: Sonar scan with Gradle
         run: >
@@ -51,8 +53,6 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: ./.github/actions/teardown
 
   publishArtifacts:
     runs-on: ubuntu-latest
