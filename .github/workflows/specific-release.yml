@@ -17,6 +17,8 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
+      - uses: ./.github/actions/setup
+
       - name: Release with Gradle
         run: >
           ./gradlew release -Prelease.useAutomaticVersion=true
@@ -26,3 +28,5 @@ jobs:
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
+
+      - uses: ./.github/actions/teardown
