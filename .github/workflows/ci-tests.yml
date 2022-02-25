@@ -57,23 +57,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: ./.github/actions/teardown
-
-  publishArtifacts:
-    runs-on: ubuntu-latest
-    needs: BuildAndTest
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-
-      - uses: ./.github/actions/setup
-
-      - name: Publish artifact to artifactory
-        run: >
-          ./gradlew publishArtifacts -Pdeploy.username=$ARTIFACTORY_USERNAME -Pdeploy.password=$ARTIFACTORY_PASSWORD
-        env:
-           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
-           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
-
-      - uses: ./.github/actions/teardown
