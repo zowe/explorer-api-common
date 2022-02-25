@@ -1,10 +1,8 @@
 name: Snapshot Release
 on:
-  # TODO enable on push to master
-#  push:
-#    branches:
-#      - master
-  workflow_dispatch:
+  push:
+    branches:
+      - master
 
 jobs:
   release:
