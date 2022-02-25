@@ -1,5 +1,5 @@
 dependencies {
-	compile project(':explorer-api-common')
+	compile project(':explorer-api-common-lib')
     compile libraries.spring_boot_starter_test
     compile libraries.powermock_api_mockito2
     compile libraries.power_mock_junit4

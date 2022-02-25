@@ -1,5 +1,5 @@
 ext.javaLibraries = [
-    'explorer-api-common',
+    'explorer-api-common-lib',
     'explorer-api-common-test'
 ]
 
