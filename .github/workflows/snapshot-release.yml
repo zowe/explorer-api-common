@@ -20,7 +20,6 @@ jobs:
         run: >
           ./gradlew publishAllVersions
           -Pdeploy.username=$ARTIFACTORY_USERNAME -Pdeploy.password=$ARTIFACTORY_PASSWORD
-          -Partifactory_user=$ARTIFACTORY_USERNAME -Partifactory_password=$ARTIFACTORY_USERNAME
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
