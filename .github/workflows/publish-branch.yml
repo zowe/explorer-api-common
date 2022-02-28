@@ -1,11 +1,11 @@
-name: Snapshot Release
+name: Publish branch
 on:
-  push:
+  push: # run on push to any branch except master
     branches:
-      - master
+      - "!master"
 
 jobs:
-  release:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -14,7 +14,13 @@ jobs:
 
       - uses: ./.github/actions/setup
 
-      - name: Release with Gradle
+      - name: Set version to include branch
+        run: |
+          # Get branch name and replace / with -
+          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads}" | sed -e "s/\//-/g")
+          sed -i '/version=/ s/-SNAPSHOT/-'"$BRANCH_NAME"'-SNAPSHOT/g' ./gradle.properties
+
+      - name: Publish with Gradle
         run: >
           ./gradlew publishAllVersions
           -Pdeploy.username=$ARTIFACTORY_USERNAME -Pdeploy.password=$ARTIFACTORY_PASSWORD

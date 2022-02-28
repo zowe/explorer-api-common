@@ -2,7 +2,7 @@ ext {
     springBootVersion = '2.3.12.RELEASE'
     springSecurityVersion = '5.3.11.RELEASE!!'
     springFoxVersion = '3.0.0'
-    lombokVersion = '1.16.20'
+    lombokVersion = '1.18.20'
     mockitoCoreVersion = '2.9.0'
     powerMockVersion = "1.7.3"
     gsonVersion = '2.8.2'
