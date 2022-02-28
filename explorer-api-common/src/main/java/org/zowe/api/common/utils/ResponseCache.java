@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2019
+ * Copyright IBM Corporation 2018, 2020
  */
 package org.zowe.api.common.utils;
 
@@ -19,6 +19,8 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
+import org.springframework.http.MediaType;
+import org.springframework.util.Base64Utils;
 
 import java.io.IOException;
 
@@ -36,7 +38,13 @@ public class ResponseCache {
         }
         this.entity = response.getEntity();
         if (entity != null) {
-            this.entityString = EntityUtils.toString(entity, "UTF-8");
+            if (isOctetStream()) {
+                // binary data to base64 string
+                byte[] entityContent = EntityUtils.toByteArray(entity);
+                this.entityString = Base64Utils.encodeToString(entityContent);
+            } else {
+                this.entityString = EntityUtils.toString(entity, "UTF-8");
+            }
         }
     }
 
@@ -66,6 +74,13 @@ public class ResponseCache {
 
     public ContentType getContentType() {
         return ContentType.get(entity);
+    }
+
+    private boolean isOctetStream() {
+        if (this.getContentType() != null) {
+            return this.getContentType().getMimeType().equals(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        }
+        return false;
     }
 
     // TODO - do we need to cache this?

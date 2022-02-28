@@ -3,6 +3,10 @@ dependencies {
     compile libraries.spring_boot_starter_actuator
     compile libraries.spring_boot_starter_parent
     compile libraries.spring_boot_starter_security
+    compile libraries.spring_security_config
+    compile libraries.spring_security_core
+    compile libraries.spring_security_crypto
+    compile libraries.spring_security_web
     compile libraries.spring_boot_starter_web
     compile libraries.http_core
     compile libraries.http_client
@@ -11,7 +15,11 @@ dependencies {
     compile libraries.springFox
     compile libraries.springFoxSwagger2
     compile libraries.springFoxSwaggerUI
+    compile libraries.tomcat_annotations_api
+    compile libraries.tomcat_embed_core
+    compile libraries.tomcat_embed_websocket
     compile libraries.lombok
+    annotationProcessor libraries.lombok
 
     testCompile libraries.spring_boot_starter_test
     testCompile libraries.powermock_api_mockito2

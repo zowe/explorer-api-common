@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2018
+ * Copyright IBM Corporation 2018, 2020
  */
 package org.zowe.api.common.connectors.zosmf;
 
@@ -18,9 +18,9 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @EnableConfigurationProperties
-@ConfigurationProperties("zosmf")
-public class ZosmfProperties {
-
+@ConfigurationProperties("connection")
+public class ConnectionProperties {
+    
     private String ipAddress;
     private Integer httpsPort;
 }

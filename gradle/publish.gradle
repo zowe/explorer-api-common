@@ -1,5 +1,6 @@
+ext.explorerApiCommonLib = 'explorer-api-common-lib'
 ext.javaLibraries = [
-    'explorer-api-common',
+    ext.explorerApiCommonLib,
     'explorer-api-common-test'
 ]
 
@@ -14,6 +15,11 @@ configure(subprojects.findAll { it.name in projectsToPublish }) {
     apply plugin: 'maven-publish'
     // Java will already be applied elsewhere, but need it here for 'sourceSets'
     apply plugin: 'java'
+
+    // change artifactId for lib project
+    if (it.name == project.explorerApiCommonLib) {
+        it.ext.artifactId = 'explorer-api-common'
+    }
     
     task sourcesJar(type: Jar) {
     	from sourceSets.main.allJava
@@ -31,10 +37,10 @@ configure(subprojects.findAll { it.name in projectsToPublish }) {
                 username project.hasProperty("deploy.username") ? project.getProperty("deploy.username") : mavenPublishUser
                 password  project.hasProperty("deploy.password") ? project.getProperty("deploy.password") : mavenPublishPassword
             }
-            if (rootProject.version.endsWith("-SNAPSHOT")) {
-                setUrl(artifactoryPublishingMavenSnapshotRepo)
-            } else {
+            if (rootProject.version =~ '^[0-9]+\\.[0-9]+\\.[0-9]+$' ) {
                 setUrl(artifactoryPublishingMavenRepo)
+            } else {
+                setUrl(artifactoryPublishingMavenSnapshotRepo)
             }
         }
     }
@@ -44,7 +50,7 @@ configure(subprojects.findAll { it.name in projectsToPublish }) {
             mavenJava(MavenPublication) {
                 groupId 'org.zowe.explorer.api'
                 version rootProject.version
-                artifactId "${project.name}"
+                artifactId "${project.hasProperty('artifactId') ? project.artifactId : project.name}"
                 from components.java
                 artifact sourcesJar
                 artifact javadocJar
@@ -60,6 +66,10 @@ configure(subprojects.findAll { it.name in projectsToPublish }) {
     }
 
     tasks.withType(Jar) {
+        metaInf {
+            from rootProject.file("LICENSE")
+        }
+
         manifest {
             attributes "Specification-Title": project.name
             attributes "Specification-Version": rootProject.version
@@ -69,17 +79,24 @@ configure(subprojects.findAll { it.name in projectsToPublish }) {
             attributes "Implementation-Version": rootProject.version
             attributes "Implementation-Vendor": "Zowe Open Source Project"
             attributes "Implementation-Vendor-Id": "org.zowe"
+
+            attributes "Bundle-License": "https://www.eclipse.org/legal/epl-v20.html"
         }
     }
 
+    tasks.withType(PublishToMavenRepository) {
+        doLast {
+            println(">>>>>Published ${publication.groupId}:${publication.artifactId}:${publication.version} to ${repository.url}")
+        }
+    }
 }
 
 //noinspection GroovyAssignabilityCheck
 task publishArtifacts {
-    group 'Zoe Publishing'
-    description 'Publish api-common libraries to Zoe Artifactory'
+    group 'Zowe Publishing'
+    description 'Publish api-common libraries to Zowe Artifactory'
     doLast {
-        println 'Publish api-common libraries to Zoe Artifactory'
+        println 'Publish api-common libraries to Zowe Artifactory'
     }
 }
 

@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2018
+ * Copyright IBM Corporation 2018, 2020
  */
 package org.zowe.api.common.security;
 
@@ -15,16 +15,15 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-
+    
     @Autowired
     CustomAuthenticationProvider authenticationProvider;
-
+    
     @Autowired
     private AuthenticationEntryPoint authEntryPoint;
 
@@ -35,14 +34,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // TODO - re-enable csrf?
-        http.csrf().disable().authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll().antMatchers("/api/**/*")
-                .authenticated().and().httpBasic().authenticationEntryPoint(authEntryPoint).and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/**/logout"));
+        http.csrf().disable().authorizeRequests()
+            .antMatchers(AUTH_WHITELIST).permitAll()
+            .antMatchers("/api/v2/**").permitAll()
+            .antMatchers("/api/v1/**").authenticated().and().httpBasic().authenticationEntryPoint(authEntryPoint)
+            .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/**/logout"));
     }
-
+    
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authenticationProvider);
     }
-
 }

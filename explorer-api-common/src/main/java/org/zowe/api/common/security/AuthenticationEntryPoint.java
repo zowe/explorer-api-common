@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  *
- * Copyright IBM Corporation 2018, 2018
+ * Copyright IBM Corporation 2018
  */
 package org.zowe.api.common.security;
 
@@ -32,7 +32,7 @@ public class AuthenticationEntryPoint extends BasicAuthenticationEntryPoint {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         setRealmName("DeveloperStack");
         super.afterPropertiesSet();
     }
