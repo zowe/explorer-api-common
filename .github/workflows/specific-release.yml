@@ -24,6 +24,7 @@ jobs:
           ./gradlew release -Prelease.useAutomaticVersion=true
           -Prelease.releaseVersion=${{ github.event.inputs.release_version }}
           -Prelease.newVersion=${{ github.event.inputs.new_version }}
+          -Pdeploy.username=$ARTIFACTORY_USERNAME -Pdeploy.password=$ARTIFACTORY_PASSWORD
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
