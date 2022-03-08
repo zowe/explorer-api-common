@@ -4,6 +4,9 @@ on:
     branches-ignore:
       - master
 
+env:
+  BRANCH_NAME: ${{ github.ref_name }}
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -16,9 +19,9 @@ jobs:
 
       - name: Set version to include branch
         run: |
-          # Get branch name and replace / with -
-          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads}" | sed -e "s/\//-/g")
-          sed -i '/version=/ s/-SNAPSHOT/-'"$BRANCH_NAME"'-SNAPSHOT/g' ./gradle.properties
+          # Replace / and _ with - in branch name
+          CLEAN_BRANCH_NAME=$(echo "$BRANCH_NAME" | sed "s/\//-/g" | sed "s/_/-/g" | awk '{print toupper($0)}')
+          sed -i '/version=/ s/-SNAPSHOT/-'"$CLEAN_BRANCH_NAME"'-SNAPSHOT/g' ./gradle.properties
 
       - name: Publish with Gradle
         run: >
