@@ -156,7 +156,7 @@ release {
         requireBranch = ''
         pushToRemote = 'origin'
         pushToBranchPrefix = ''
-        commitVersionFileOnly = false
+        commitVersionFileOnly = true
         signTag = false
     }
 }
