@@ -20,7 +20,12 @@ jobs:
         with:
           ref: ${{ github.head_ref }}
 
-      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/
+
+      - name: Set up git
+        run: |
+          git config user.email "zowe-robot@users.noreply.github.com"
+          git config user.name "Zowe Robot"
 
       - name: Release with Gradle
         run: >
