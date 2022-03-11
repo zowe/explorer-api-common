@@ -16,7 +16,6 @@ import io.restassured.response.Response;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpStatus;
-import org.junit.BeforeClass;
 import org.zowe.api.common.errors.ApiError;
 import org.zowe.api.common.exceptions.ZoweApiRestException;
 
@@ -35,32 +34,30 @@ public abstract class AbstractHttpIntegrationTest {
     private final static String GATEWAY_HOST = System.getProperty("gateway.host");
     private final static String GATEWAY_PORT = System.getProperty("gateway.port");
 
-    protected final static String BASE_URL = getBaseUrl();
-
     protected final static String USER = System.getProperty("server.username");
     private final static String PASSWORD = System.getProperty("server.password");
     protected final static Header AUTH_HEADER = getAuthHeader();
-    
-    private static String getBaseUrl() {
-        String baseUrl = "https://" + SERVER_HOST + ":" + SERVER_PORT;
+
+    protected static String getBaseUrl(String serviceId) {
+        String baseUrl = "https://" + SERVER_HOST + ":" + SERVER_PORT + "/" + serviceId;
         if (System.getProperty("test.version") != null && System.getProperty("test.version").equals("1")) {
             return baseUrl + "/api/v1/";
         }
         return baseUrl + "/api/v2/";
     }
-    
-    private static Header getAuthHeader() {        
+
+    private static Header getAuthHeader() {
         RestAssured.useRelaxedHTTPSValidation();
         if (System.getProperty("test.version") != null && System.getProperty("test.version").equals("1")) {
             return getBasicAuthHeader();
         }
         return getJWTAuthHeader();
     }
-    
+
     private static Header getJWTAuthHeader() {
         Response response = RestAssured.given().contentType("application/json")
                 .body("{\"username\":\"" + USER + "\",\"password\":\"" + PASSWORD + "\"}")
-                .when().post("https://" + getGatewayHost() + ":" + getGatewayPort() + "/api/v1/gateway/auth/login");
+                .when().post("https://" + getGatewayHost() + ":" + getGatewayPort() + "/gateway/api/v1/auth/login");
         assertEquals(response.getStatusCode(), HttpStatus.SC_NO_CONTENT);
         return new Header("Authorization", "Bearer " + response.getCookie("apimlAuthenticationToken"));
     }
@@ -79,16 +76,11 @@ public abstract class AbstractHttpIntegrationTest {
         }
         return SERVER_PORT;
     }
-    
+
     private static Header getBasicAuthHeader() {
-        String credentials = System.getProperty("server.username") + ":" + System.getProperty("server.password"); 
+        String credentials = System.getProperty("server.username") + ":" + System.getProperty("server.password");
         byte[] encodedAuth = Base64.encodeBase64(credentials.getBytes(StandardCharsets.ISO_8859_1));
         return new Header("Authorization", "Basic " + new String(encodedAuth));
-    }
-    
-    @BeforeClass
-    public static void setupRestAssured() {
-        RestAssured.baseURI = BASE_URL;
     }
 
     protected void verifyExceptionReturn(ZoweApiRestException expected, Response response) {
@@ -97,7 +89,7 @@ public abstract class AbstractHttpIntegrationTest {
 
     protected void verifyExceptionReturn(ApiError expectedError, Response response) {
         response.then().statusCode(expectedError.getStatus().value()).contentType(ContentType.JSON)
-            .body("status", equalTo(expectedError.getStatus().name()))
-            .body("message", equalTo(expectedError.getMessage()));
+                .body("status", equalTo(expectedError.getStatus().name()))
+                .body("message", equalTo(expectedError.getMessage()));
     }
 }

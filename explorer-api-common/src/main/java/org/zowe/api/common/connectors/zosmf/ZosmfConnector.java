@@ -46,7 +46,7 @@ public abstract class ZosmfConnector {
     }
     public URI getFullUrl(String relativePath, String query) throws URISyntaxException {
         try {
-            return new URI("https", null, host, port, "/api/v1/zosmf/" + relativePath, query, null);
+            return new URI("https", null, host, port, "/zosmf/api/v1/" + relativePath, query, null);
         } catch (URISyntaxException e) {
             log.error("getFullUrl", e);
             throw e;
