@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 
 env:
+  V2_BRANCH: v2.x/master
   MERGE_TO_V2_BRANCH: explorer-api-common/v2/merge
 
 jobs:
@@ -28,11 +29,9 @@ jobs:
         run: |
           git config --global user.email "zowe-robot@users.noreply.github.com"
           git config --global user.name "Zowe Robot"
-          git checkout master
-          git checkout v2.x/master
-          git branch ${{ env.MERGE_TO_V2_BRANCH }}
+          git config --global pull.rebase false
           git checkout ${{ env.MERGE_TO_V2_BRANCH }}
-          git merge master
+          git pull origin master
 
       - name: Create pull request
         uses: actions/github-script@v6
@@ -42,8 +41,8 @@ jobs:
             await github.rest.pulls.create({
                 owner: 'zowe',
                 repo: 'explorer-api-common',
-                title: 'Automatic PR to v2 branch',
+                title: 'Automatic PR to ${{ env.V2_BRANCH }} from master',
                 body: 'Automatically prepared PR for merging into the V2 branch',
-                head: 'master',
+                head: '${{ env.V2_BRANCH }}',
                 base: '${{ env.MERGE_TO_V2_BRANCH }}'
             });
