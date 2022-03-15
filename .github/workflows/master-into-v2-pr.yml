@@ -30,7 +30,7 @@ jobs:
           git config --global user.email "zowe-robot@users.noreply.github.com"
           git config --global user.name "Zowe Robot"
           git config --global pull.rebase false
-          git checkout ${{ env.MERGE_TO_V2_BRANCH }}
+          git checkout ${{ env.MERGE_TO_V2_BRANCH }} || git checkout -b ${{ env.MERGE_TO_V2_BRANCH }}
           git pull origin master
 
       - name: Create pull request
@@ -38,11 +38,22 @@ jobs:
         with:
           github-token: ${{ secrets.ZOWE_ROBOT_TOKEN }}
           script: |
-            await github.rest.pulls.create({
+            try {
+              await github.rest.pulls.create({
                 owner: 'zowe',
                 repo: 'explorer-api-common',
                 title: 'Automatic PR to ${{ env.V2_BRANCH }} from master',
                 body: 'Automatically prepared PR for merging into the V2 branch',
                 head: '${{ env.V2_BRANCH }}',
                 base: '${{ env.MERGE_TO_V2_BRANCH }}'
-            });
+              });
+            } catch (ex) {
+              if (
+                ex.message &&
+                ex.message.includes("No commits between ${{ env.MERGE_TO_V2_BRANCH }} and ${{ env.V2_BRANCH }}")
+              ) {
+                console.log("No commits to make PR for, ending without error");
+              } else {
+                throw ex;
+              }
+            }
