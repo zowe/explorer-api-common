@@ -15,6 +15,7 @@ dependencies {
     compile libraries.jackson_core
     compile libraries.jackson_databind
     compile libraries.gson
+    compile libraries.logback_classic
     compile libraries.springFox
     compile libraries.springFoxSwagger2
     compile libraries.springFoxSwaggerUI
