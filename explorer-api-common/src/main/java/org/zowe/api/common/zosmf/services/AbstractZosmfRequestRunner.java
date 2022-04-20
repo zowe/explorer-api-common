@@ -56,7 +56,8 @@ public abstract class AbstractZosmfRequestRunner<T> {
                 requestBuilder = addHeadersToRequest(requestBuilder);
             }
             URI uri = requestBuilder.getUri();
-            
+
+            log.debug("Request: {}", requestBuilder);
             HttpResponse response = zosmfConnector.executeRequest(requestBuilder);
             ResponseCache responseCache = new ResponseCache(response);
             return processResponse(responseCache, uri);
@@ -82,7 +83,9 @@ public abstract class AbstractZosmfRequestRunner<T> {
         int statusCode = responseCache.getStatus();
         boolean success = IntStream.of(getSuccessStatus()).anyMatch(x -> x == statusCode);
         if (success) {
-            return getResult(responseCache);
+            T result = getResult(responseCache);
+            log.debug("Request to '{}' result: {}", uri, result);
+            return result;
         } else {
             log.error(String.format("processResponse - received response code : %s  - received response message: %s ", statusCode, responseCache.getEntity()));
             throw createGeneralException(responseCache, uri);
