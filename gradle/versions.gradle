@@ -13,6 +13,7 @@ ext {
     commonsCodecVersion = '1.15'
     slf4jVersion = "1.7.25"
     jacksonCoreVersion = '2.13.2'
+    jacksonDatabindVersion = '2.13.2.2'
     jsonPathVersion = "2.4.0"
     junitVersion = "4.13.1"
     restAssuredVersion = "4.3.0"
@@ -53,7 +54,7 @@ ext {
         commons_codec                      : "commons-codec:commons-codec:${commonsCodecVersion}",
         jackson_annotations                : "com.fasterxml.jackson.core:jackson-annotations:${jacksonCoreVersion}",
         jackson_core                       : "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}",
-        jackson_databind                   : "com.fasterxml.jackson.core:jackson-databind:${jacksonCoreVersion}",
+        jackson_databind                   : "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}",
         json_path                          : "com.jayway.jsonpath:json-path:${jsonPathVersion}",
         logback_classic                    : "ch.qos.logback:logback-classic:${logbackVersion}",
         springFox                          : "io.springfox:springfox-swagger2:${springFoxVersion}",
