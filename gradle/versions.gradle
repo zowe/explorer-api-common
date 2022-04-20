@@ -1,7 +1,7 @@
 ext {
     springBootVersion = '2.3.12.RELEASE'
     springSecurityVersion = '5.3.11.RELEASE!!'
-    springFrameworkVersion = '5.2.20.RELEASE!!'
+    springFrameworkVersion = '5.2.21.RELEASE!!'
     springFoxVersion = '3.0.0'
     logbackVersion = '1.2.9'
     lombokVersion = '1.18.20'
