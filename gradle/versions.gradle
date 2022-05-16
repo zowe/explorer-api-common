@@ -7,7 +7,7 @@ ext {
     lombokVersion = '1.18.20'
     mockitoCoreVersion = '2.9.0'
     powerMockVersion = "1.7.3"
-    gsonVersion = '2.8.2'
+    gsonVersion = '2.9.0'
     httpClientVersion = '4.5.13'
     httpCoreVersion = '4.4.10'
     commonsCodecVersion = '1.15'
