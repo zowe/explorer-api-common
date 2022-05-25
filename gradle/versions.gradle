@@ -1,5 +1,5 @@
 ext {
-    springBootVersion = '2.3.12.RELEASE'
+    springBootVersion = '2.5.13'
     springSecurityVersion = '5.3.11.RELEASE!!'
     springFrameworkVersion = '5.3.20!!'
     springFoxVersion = '3.0.0'
