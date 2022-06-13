@@ -27,9 +27,7 @@ dependencies {
     compile libraries.jackson_databind
     compile libraries.gson
     compile libraries.logback_classic
-    compile libraries.springFox
-    compile libraries.springFoxSwagger2
-    compile libraries.springFoxSwaggerUI
+    compile libraries.spring_doc
     compile libraries.tomcat_annotations_api
     compile libraries.tomcat_embed_core
     compile libraries.tomcat_embed_el

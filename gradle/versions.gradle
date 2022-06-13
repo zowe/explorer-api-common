@@ -2,7 +2,7 @@ ext {
     springBootVersion = '2.5.13'
     springSecurityVersion = '5.7.1!!'
     springFrameworkVersion = '5.3.20!!'
-    springFoxVersion = '3.0.0'
+    springDocVersion = '1.6.9'
     logbackVersion = '1.2.9'
     lombokVersion = '1.18.20'
     mockitoCoreVersion = '2.9.0'
@@ -46,6 +46,7 @@ ext {
         spring_test                        : "org.springframework:spring-test:${springFrameworkVersion}",
         spring_web                         : "org.springframework:spring-web:${springFrameworkVersion}",
         spring_webmvc                      : "org.springframework:spring-webmvc:${springFrameworkVersion}",
+        spring_doc                         : "org.springdoc:springdoc-openapi-ui:${springDocVersion}",
 
         tomcat_annotations_api             : "org.apache.tomcat:tomcat-annotations-api:${tomcatVersion}",
         tomcat_embed_core                  : "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
@@ -58,9 +59,6 @@ ext {
         jackson_databind                   : "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}",
         json_path                          : "com.jayway.jsonpath:json-path:${jsonPathVersion}",
         logback_classic                    : "ch.qos.logback:logback-classic:${logbackVersion}",
-        springFox                          : "io.springfox:springfox-swagger2:${springFoxVersion}",
-        springFoxSwagger2                  : "io.springfox:springfox-swagger2:${springFoxVersion}",
-        springFoxSwaggerUI                 : "io.springfox:springfox-swagger-ui:${springFoxVersion}",
 
         http_core                          : "org.apache.httpcomponents:httpcore:${httpCoreVersion}",
         http_client                        : "org.apache.httpcomponents:httpclient:${httpClientVersion}",
