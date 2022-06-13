@@ -20,8 +20,8 @@ import org.zowe.api.common.utils.ZosUtils;
 public abstract class AbstractApiController {
 
     @GetMapping(value = "username", produces = {"application/json"})
-    @Operation(summary = "Get current userid", description = "This API returns the caller's current TSO userid.", tags = {
-            "System APIs", "getCurrentUserName"})
+    @Operation(summary = "Get current userid", description = "This API returns the caller's current TSO userid.", tags =
+            "System APIs", operationId = "getCurrentUserName")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Ok")})
     public Username getCurrentUserName() {
         return new Username(ZosUtils.getUsername());
