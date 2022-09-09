@@ -25,7 +25,7 @@ ext {
         lombok                             : "org.projectlombok:lombok:${lombokVersion}",
         slf4j_simple                       : "org.slf4j:slf4j-simple:${slf4jVersion}",
         slf4j_api                          : "org.slf4j:slf4j-api:${slf4jVersion}",
-        snakeyaml : "org.yaml:snakeyaml:${snakeYaml}",
+        snakeyaml                          : "org.yaml:snakeyaml:${snakeYaml}",
         spring_boot_gradle_plugin          : "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}",
         spring_boot_starter_actuator       : "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}",
         spring_boot_starter_parent         : "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}",
