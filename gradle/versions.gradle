@@ -1,5 +1,5 @@
 ext {
-    springBootVersion = '2.5.13'
+    springBootVersion = '2.5.14'
     springSecurityVersion = '5.7.5!!'
     springFrameworkVersion = '5.3.24!!'
     springDocVersion = '1.6.9'
@@ -9,17 +9,17 @@ ext {
     powerMockVersion = "1.7.3"
     gsonVersion = '2.9.0'
     httpClientVersion = '4.5.13'
-    httpCoreVersion = '4.4.10'
+    httpCoreVersion = '4.4.14'
     commonsCodecVersion = '1.15'
     slf4jVersion = "1.7.25"
     snakeYaml = "1.33"
-    jacksonCoreVersion = '2.13.2'
-    jacksonDatabindVersion = '2.14.0'
+    jacksonCoreVersion = '2.14.1'
+    jacksonDatabindVersion = '2.14.1'
     jsonPathVersion = "2.4.0"
     junitVersion = "4.13.1"
     restAssuredVersion = "4.3.0"
     hamcrestJunitVersion = "2.0.0.0"
-    tomcatVersion = "9.0.68"
+    tomcatVersion = "9.0.70"
 
     libraries = [
         lombok                             : "org.projectlombok:lombok:${lombokVersion}",
