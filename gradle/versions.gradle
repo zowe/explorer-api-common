@@ -19,7 +19,7 @@ ext {
     junitVersion = "4.13.1"
     restAssuredVersion = "4.3.0"
     hamcrestJunitVersion = "2.0.0.0"
-    tomcatVersion = "9.0.73"
+    tomcatVersion = "9.0.75"
 
     libraries = [
         lombok                             : "org.projectlombok:lombok:${lombokVersion}",
