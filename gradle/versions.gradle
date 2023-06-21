@@ -1,6 +1,6 @@
 ext {
     springBootVersion = '2.5.13'
-    springSecurityVersion = '5.7.5!!'
+    springSecurityVersion = '5.7.8!!'
     springFrameworkVersion = '5.3.20!!'
     springDocVersion = '1.6.9'
     logbackVersion = '1.2.9'
