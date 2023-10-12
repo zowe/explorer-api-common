@@ -1,7 +1,7 @@
 ext {
     springBootVersion = '2.7.12'
     springSecurityVersion = '5.7.11!!'
-    springFrameworkVersion = '5.3.20!!'
+    springFrameworkVersion = '5.3.30!!'
     springDocVersion = '1.6.9'
     logbackVersion = '1.2.9'
     lombokVersion = '1.18.20'
@@ -19,7 +19,7 @@ ext {
     junitVersion = "4.13.1"
     restAssuredVersion = "4.3.0"
     hamcrestJunitVersion = "2.0.0.0"
-    tomcatVersion = "9.0.80"
+    tomcatVersion = "9.0.81"
 
     libraries = [
         lombok                             : "org.projectlombok:lombok:${lombokVersion}",
