@@ -29,8 +29,8 @@ buildscript {
     repositories mavenRepositories
 
     dependencies {
-        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.7'
-        classpath 'net.researchgate:gradle-release:2.6.0'
+        classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8'
+        classpath 'net.researchgate:gradle-release:2.8.1'
         classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:${licenseGradlePluginVersion}"
         classpath 'org.owasp:dependency-check-gradle:3.3.4'
     }
@@ -68,6 +68,16 @@ allprojects {
     configurations.all {
         exclude group: 'org.glassfish', module: 'jakarta.el'
     }
+
+    dependencies {
+        constraints {
+            compileOnly libraries.values()
+            implementation libraries.values()
+            testImplementation libraries.values()
+            annotationProcessor libraries.values()
+        }
+    }
+
 }
 
 subprojects {
