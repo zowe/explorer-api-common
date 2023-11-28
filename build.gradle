@@ -67,6 +67,9 @@ allprojects {
 
     configurations.all {
         exclude group: 'org.glassfish', module: 'jakarta.el'
+        exclude group: 'org.junit.jupiter'
+
+        resolutionStrategy.force libraries.mockito_core
     }
 
     dependencies {

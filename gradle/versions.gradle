@@ -6,7 +6,7 @@ ext {
     logbackVersion = '1.2.12'
     lombokVersion = '1.18.30'
     mockitoCoreVersion = '2.28.2'
-    powerMockVersion = "1.7.4"
+    powerMockVersion = "2.0.9"
     gsonVersion = '2.10.1'
     httpClientVersion = '4.5.14'
     httpCoreVersion = '4.4.16'
