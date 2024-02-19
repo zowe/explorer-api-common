@@ -43,12 +43,13 @@ jobs:
 
       - uses: ./.github/actions/setup
         with:
-          jdkVersion: 11
+          jdkVersion: 17
 
       - name: Sonar scan with Gradle
-        run: |
-          export JAVA_HOME=$JAVA_HOME_17_${{ runner.arch }}
-          ./gradlew --info coverage sonarqube -Psonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN -Partifactory_user=$ARTIFACTORY_USERNAME -Partifactory_password=$ARTIFACTORY_PASSWORD
+        run: >
+          ./gradlew --info coverage sonarqube
+          -Psonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN
+          -Partifactory_user=$ARTIFACTORY_USERNAME -Partifactory_password=$ARTIFACTORY_PASSWORD
         env:
           ARTIFACTORY_USERNAME: ${{ secrets.ARTIFACTORY_USERNAME }}
           ARTIFACTORY_PASSWORD: ${{ secrets.ARTIFACTORY_PASSWORD }}
