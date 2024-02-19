@@ -1,9 +1,9 @@
 dependencies {
-	compile project(':explorer-api-common-lib')
-    compile libraries.spring_boot_starter_test
-    compile libraries.powermock_api_mockito2
-    compile libraries.power_mock_junit4
-    compile libraries.power_mock_junit4_rule
-    compile libraries.mockito_core
-    compile libraries.restAssured
+    implementation(project(':explorer-api-common-lib'))
+    implementation libraries.spring_boot_starter_test
+    implementation libraries.powermock_api_mockito2
+    implementation libraries.power_mock_junit4
+    implementation libraries.power_mock_junit4_rule
+    implementation libraries.mockito_core
+    implementation libraries.restAssured
 }

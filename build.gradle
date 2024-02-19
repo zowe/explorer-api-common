@@ -45,7 +45,6 @@ apply from: 'gradle/code-quality.gradle'
 allprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
-    apply plugin: 'maven'
     apply plugin: 'com.github.hierynomus.license'
     apply plugin: 'org.owasp.dependencycheck'
 
