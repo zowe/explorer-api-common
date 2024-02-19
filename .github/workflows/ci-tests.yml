@@ -47,6 +47,7 @@ jobs:
 
       - name: Sonar scan with Gradle
         run: >
+          export JAVA_HOME=$JAVA_HOME_17_${{ runner.arch }}
           ./gradlew --info coverage sonarqube
           -Psonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN
           -Partifactory_user=$ARTIFACTORY_USERNAME -Partifactory_password=$ARTIFACTORY_PASSWORD
