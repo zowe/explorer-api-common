@@ -22,7 +22,7 @@ ext {
     tomcatVersion = "9.0.85"
     activationApiVersion = "1.2.2"
     xmlBindApiVersion = "2.3.3"
-    objenesisVersion = "3.2"
+    objenesisVersion = "3.3"
 
     libraries = [
         lombok                             : "org.projectlombok:lombok:${lombokVersion}",
