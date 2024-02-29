@@ -3,7 +3,7 @@ ext {
     springSecurityVersion = '5.7.11!!'
     springFrameworkVersion = '5.3.30!!'
     springDocVersion = '1.6.9'
-    logbackVersion = '1.2.9'
+    logbackVersion = '1.2.13'
     lombokVersion = '1.18.20'
     mockitoCoreVersion = '2.9.0'
     powerMockVersion = "1.7.3"
