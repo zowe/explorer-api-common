@@ -1,25 +1,28 @@
 ext {
-    springBootVersion = '2.7.12'
-    springSecurityVersion = '5.7.11!!'
-    springFrameworkVersion = '5.3.30!!'
-    springDocVersion = '1.6.9'
-    logbackVersion = '1.2.9'
-    lombokVersion = '1.18.20'
-    mockitoCoreVersion = '2.9.0'
-    powerMockVersion = "1.7.3"
-    gsonVersion = '2.9.0'
-    httpClientVersion = '4.5.13'
-    httpCoreVersion = '4.4.10'
-    commonsCodecVersion = '1.15'
-    slf4jVersion = "1.7.25"
-    snakeYaml = "2.0"
-    jacksonCoreVersion = '2.13.2'
-    jacksonDatabindVersion = '2.14.0'
-    jsonPathVersion = "2.4.0"
-    junitVersion = "4.13.1"
-    restAssuredVersion = "4.3.0"
+    springBootVersion = '2.7.18'
+    springSecurityVersion = '5.8.10'
+    springFrameworkVersion = '5.3.32'
+    springDocVersion = '1.7.0'
+    logbackVersion = '1.2.13'
+    lombokVersion = '1.18.30'
+    mockitoCoreVersion = '2.28.2'
+    powerMockVersion = "2.0.9"
+    gsonVersion = '2.10.1'
+    httpClientVersion = '4.5.14'
+    httpCoreVersion = '4.4.16'
+    commonsCodecVersion = '1.16.1'
+    slf4jVersion = "1.7.36"
+    snakeYaml = "2.2"
+    jacksonCoreVersion = '2.16.1'
+    jacksonDatabindVersion = '2.16.1'
+    jsonPathVersion = "2.9.0"
+    junitVersion = "4.13.2"
+    restAssuredVersion = "4.5.1"
     hamcrestJunitVersion = "2.0.0.0"
-    tomcatVersion = "9.0.82"
+    tomcatVersion = "9.0.85"
+    activationApiVersion = "1.2.2"
+    xmlBindApiVersion = "2.3.3"
+    objenesisVersion = "3.3"
 
     libraries = [
         lombok                             : "org.projectlombok:lombok:${lombokVersion}",
@@ -74,6 +77,10 @@ ext {
 
         junit                              : "junit:junit:${junitVersion}",
         restAssured						   : "io.rest-assured:rest-assured:${restAssuredVersion}",
-        hamcrest						   : "org.hamcrest:hamcrest-junit:${hamcrestJunitVersion}"      
+        hamcrest						   : "org.hamcrest:hamcrest-junit:${hamcrestJunitVersion}",
+
+        activationApi                      : "jakarta.activation:jakarta.activation-api:${activationApiVersion}",
+        xmlBindApi                         : "jakarta.xml.bind:jakarta.xml.bind-api:${xmlBindApiVersion}",
+        objenesis                          : "org.objenesis:objenesis:${objenesisVersion}"
     ]
 }
