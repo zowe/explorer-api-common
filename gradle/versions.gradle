@@ -1,10 +1,10 @@
 ext {
     springBootVersion = '2.7.18'
-    springSecurityVersion = '5.8.10'
-    springFrameworkVersion = '5.3.32'
+    springSecurityVersion = '5.8.11'
+    springFrameworkVersion = '5.3.33'
     springDocVersion = '1.7.0'
     logbackVersion = '1.2.13'
-    lombokVersion = '1.18.30'
+    lombokVersion = '1.18.32'
     mockitoCoreVersion = '2.28.2'
     powerMockVersion = "2.0.9"
     gsonVersion = '2.10.1'
@@ -13,13 +13,13 @@ ext {
     commonsCodecVersion = '1.16.1'
     slf4jVersion = "1.7.36"
     snakeYaml = "2.2"
-    jacksonCoreVersion = '2.16.1'
-    jacksonDatabindVersion = '2.16.1'
+    jacksonCoreVersion = '2.16.2'
+    jacksonDatabindVersion = '2.16.2'
     jsonPathVersion = "2.9.0"
     junitVersion = "4.13.2"
     restAssuredVersion = "4.5.1"
     hamcrestJunitVersion = "2.0.0.0"
-    tomcatVersion = "9.0.85"
+    tomcatVersion = "9.0.87"
     activationApiVersion = "1.2.2"
     xmlBindApiVersion = "2.3.3"
     objenesisVersion = "3.3"
