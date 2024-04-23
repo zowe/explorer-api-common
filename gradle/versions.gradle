@@ -1,7 +1,7 @@
 ext {
     springBootVersion = '2.7.18'
-    springSecurityVersion = '5.8.11'
-    springFrameworkVersion = '5.3.33'
+    springSecurityVersion = '5.8.12'
+    springFrameworkVersion = '5.3.34'
     springDocVersion = '1.7.0'
     logbackVersion = '1.2.13'
     lombokVersion = '1.18.32'
@@ -19,7 +19,7 @@ ext {
     junitVersion = "4.13.2"
     restAssuredVersion = "4.5.1"
     hamcrestJunitVersion = "2.0.0.0"
-    tomcatVersion = "9.0.87"
+    tomcatVersion = "9.0.88"
     activationApiVersion = "1.2.2"
     xmlBindApiVersion = "2.3.3"
     objenesisVersion = "3.3"
