@@ -19,7 +19,7 @@ ext {
     junitVersion = "4.13.2"
     restAssuredVersion = "4.5.1"
     hamcrestJunitVersion = "2.0.0.0"
-    tomcatVersion = "9.0.90"
+    tomcatVersion = "9.0.93"
     activationApiVersion = "1.2.2"
     xmlBindApiVersion = "2.3.3"
     objenesisVersion = "3.3"
