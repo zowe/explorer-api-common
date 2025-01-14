@@ -1,28 +1,28 @@
 ext {
     springBootVersion = '2.7.18'
-    springSecurityVersion = '5.8.13'
+    springSecurityVersion = '5.8.16'
     springFrameworkVersion = '5.3.39'
-    springDocVersion = '1.7.0'
+    springDocVersion = '1.8.0'
     logbackVersion = '1.2.13'
-    lombokVersion = '1.18.32'
+    lombokVersion = '1.18.36'
     mockitoCoreVersion = '2.28.2'
     powerMockVersion = "2.0.9"
-    gsonVersion = '2.10.1'
+    gsonVersion = '2.11.0'
     httpClientVersion = '4.5.14'
     httpCoreVersion = '4.4.16'
-    commonsCodecVersion = '1.16.1'
+    commonsCodecVersion = '1.17.2'
     slf4jVersion = "1.7.36"
-    snakeYaml = "2.2"
-    jacksonCoreVersion = '2.17.1'
-    jacksonDatabindVersion = '2.17.1'
+    snakeYaml = "2.3"
+    jacksonCoreVersion = '2.17.3'
+    jacksonDatabindVersion = '2.17.3'
     jsonPathVersion = "2.9.0"
     junitVersion = "4.13.2"
     restAssuredVersion = "4.5.1"
     hamcrestJunitVersion = "2.0.0.0"
-    tomcatVersion = "9.0.93"
+    tomcatVersion = "9.0.98"
     activationApiVersion = "1.2.2"
     xmlBindApiVersion = "2.3.3"
-    objenesisVersion = "3.3"
+    objenesisVersion = "3.4"
 
     libraries = [
         lombok                             : "org.projectlombok:lombok:${lombokVersion}",
