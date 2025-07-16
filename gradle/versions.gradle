@@ -11,6 +11,7 @@ ext {
     httpClientVersion = '4.5.14'
     httpCoreVersion = '4.4.16'
     commonsCodecVersion = '1.17.2'
+    commonsLangVersion = '3.18.0'
     slf4jVersion = "1.7.36"
     snakeYaml = "2.3"
     jacksonCoreVersion = '2.17.3'
@@ -59,6 +60,7 @@ ext {
         tomcat_embed_websocket             : "org.apache.tomcat.embed:tomcat-embed-websocket:${tomcatVersion}",
 
         commons_codec                      : "commons-codec:commons-codec:${commonsCodecVersion}",
+        commons_lang3                      : "org.apache.commons:commons-lang3:${commonsLangVersion}",
         jackson_annotations                : "com.fasterxml.jackson.core:jackson-annotations:${jacksonCoreVersion}",
         jackson_core                       : "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}",
         jackson_databind                   : "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}",
