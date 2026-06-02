@@ -34,11 +34,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // TODO - re-enable csrf?
-        http.csrf().disable().authorizeRequests()
-            .antMatchers(AUTH_WHITELIST).permitAll()
-            .antMatchers("/api/v2/**").permitAll()
-            .antMatchers("/api/v1/**").authenticated().and().httpBasic().authenticationEntryPoint(authEntryPoint)
-            .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/**/logout"));
+        FixedHeadersConfigurer.fix(
+            http.csrf().disable().authorizeRequests()
+                .antMatchers(AUTH_WHITELIST).permitAll()
+                .antMatchers("/api/v2/**").permitAll()
+                .antMatchers("/api/v1/**").authenticated().and().httpBasic().authenticationEntryPoint(authEntryPoint)
+                .and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/v1/**/logout"))
+                .and()
+        );
     }
     
     @Autowired
